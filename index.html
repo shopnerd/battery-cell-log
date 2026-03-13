@@ -1,186 +1,631 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
+
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <meta name="apple-mobile-web-app-title" content="Cell Log">
+
 <title>Battery cell log</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
 <style>
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+
 .app { max-width: 480px; margin: 0 auto; padding: 1rem; }
+
 h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+
 .date { font-size: 13px; color: #666; margin-bottom: 12px; }
+
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #e8e8e3; border-radius: 10px; padding: 3px; }
+
+.tab { flex: 1; padding: 7px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; background: transparent; color: #666; }
+
+.tab.active { background: #fff; color: #1a1a1a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+.view { display: none; }
+
+.view.active { display: block; }
+
 .legend { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+
 .li { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #555; }
+
 .ld { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+
 .ld.g { background: #8bc34a; } .ld.y { background: #ffc107; } .ld.r { background: #ef5350; }
+
 .ld.d { background: #2a2a2a; }
+
 .battery-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
 .bat-row { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
 .bat-lbl { font-size: 13px; font-weight: 600; color: #444; min-width: 70px; }
+
 .cells { display: flex; gap: 10px; align-items: center; }
+
 .cell-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+
 .cell-dot { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; background: #f0f0f0; color: #888; transition: transform 0.1s; user-select: none; letter-spacing: -0.5px; }
+
 .cell-dot:active { transform: scale(0.9); }
+
 .cell-dot.g { background: #dcedc8; border-color: #8bc34a; color: #33691e; }
+
 .cell-dot.y { background: #fff9c4; border-color: #ffc107; color: #f57f17; }
+
 .cell-dot.r { background: #ffcdd2; border-color: #ef5350; color: #b71c1c; }
+
 .cell-dot.d { background: #2a2a2a; border-color: #111; color: #fff; }
+
 .cell-dot.empty { font-size: 16px; font-weight: 400; }
+
 .cell-num { font-size: 11px; color: #999; }
+
 .btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
 .btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border-radius: 10px; border: 1.5px solid #ccc; cursor: pointer; background: #fff; color: #333; }
+
 .btn.primary { background: #1D9E75; border-color: #1D9E75; color: #fff; }
-.hist-section { background: #fff; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+.btn.danger { background: #fff; border-color: #ffcdd2; color: #b71c1c; }
+
+.hist-section { background: #fff; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 12px; }
+
 .hist-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
-.hist-entry { font-size: 12px; color: #555; padding: 6px 8px; background: #f8f8f5; border-radius: 8px; margin-bottom: 6px; }
-.hist-entry .ts { font-weight: 600; color: #222; }
+
+.hist-entry { font-size: 12px; color: #555; padding: 8px 10px; background: #f8f8f5; border-radius: 8px; margin-bottom: 8px; }
+
+.hist-entry .ts { font-weight: 600; color: #222; display: block; margin-bottom: 4px; }
+
+.hist-entry .summary { font-size: 11px; color: #888; margin-bottom: 4px; }
+
+.hist-cells { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+
+.hist-cell { font-size: 10px; padding: 2px 5px; border-radius: 4px; font-weight: 600; }
+
+.hist-cell.g { background: #dcedc8; color: #33691e; }
+
+.hist-cell.y { background: #fff9c4; color: #f57f17; }
+
+.hist-cell.r { background: #ffcdd2; color: #b71c1c; }
+
+.hist-cell.d { background: #2a2a2a; color: #fff; }
+
 .no-hist { font-size: 13px; color: #aaa; text-align: center; padding: 12px 0; }
+
+.chart-controls { background: #fff; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 12px; }
+
+.chart-controls label { font-size: 13px; font-weight: 500; color: #444; display: block; margin-bottom: 6px; }
+
+.chart-controls select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1.5px solid #ddd; font-size: 13px; background: #f8f8f5; color: #1a1a1a; outline: none; }
+
+.chart-wrap { background: #fff; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 12px; }
+
+.chart-wrap canvas { width: 100% !important; }
+
+.chart-empty { font-size: 13px; color: #aaa; text-align: center; padding: 2rem 0; }
+
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
+
 .overlay.open { display: flex; }
+
 .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem 1.25rem; width: 100%; max-width: 480px; }
+
 .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+
 .modal .sub { font-size: 12px; color: #777; margin-bottom: 14px; }
+
 .modal input { width: 100%; font-size: 32px; font-weight: 700; text-align: center; padding: 12px; border: 1.5px solid #ddd; border-radius: 12px; background: #f8f8f5; color: #1a1a1a; margin-bottom: 4px; outline: none; letter-spacing: 4px; }
+
 .modal input:focus { border-color: #1D9E75; }
+
 .hint { font-size: 11px; color: #aaa; text-align: center; margin-bottom: 10px; }
+
 .scale-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 14px; }
+
 .modal-btns { display: flex; gap: 10px; }
+
 .modal-btns button { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #ddd; font-size: 15px; font-weight: 500; cursor: pointer; background: #f0f0f0; color: #333; }
+
 .modal-btns .save { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+
 .dead-btn { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #888; font-size: 14px; color: #fff; background: #2a2a2a; cursor: pointer; margin-top: 8px; }
+
 .delete-btn { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #ffcdd2; font-size: 14px; color: #b71c1c; background: #fff; cursor: pointer; margin-top: 8px; }
+
 </style>
+
 </head>
+
 <body>
+
 <div class="app">
+
   <h1>Battery cell log</h1>
+
   <div class="date" id="today"></div>
-  <div class="legend">
-    <div class="li"><div class="ld g"></div>Good 1240–1300</div>
-    <div class="li"><div class="ld y"></div>Fair 1160–1239</div>
-    <div class="li"><div class="ld r"></div>Low 1100–1159</div>
-    <div class="li"><div class="ld d"></div>No reading</div>
+
+  <div class="tabs">
+
+    <button class="tab active" onclick="switchTab('log')">Log</button>
+
+    <button class="tab" onclick="switchTab('history')">History</button>
+
+    <button class="tab" onclick="switchTab('chart')">Chart</button>
+
   </div>
-  <div class="battery-list" id="batteryList"></div>
-  <div class="btns">
-    <button class="btn primary" onclick="saveSession()">Save session</button>
-    <button class="btn" onclick="toggleHist()">History</button>
-    <button class="btn" onclick="clearAll()">Clear</button>
-  </div>
-  <div id="histSection" style="display:none">
-    <div class="hist-section">
-      <div class="hist-title">Past sessions</div>
-      <div id="histContent"></div>
+
+  <div id="view-log" class="view active">
+
+    <div class="legend">
+
+      <div class="li"><div class="ld g"></div>Good 1240–1300</div>
+
+      <div class="li"><div class="ld y"></div>Fair 1160–1239</div>
+
+      <div class="li"><div class="ld r"></div>Low 1100–1159</div>
+
+      <div class="li"><div class="ld d"></div>No reading</div>
+
     </div>
+
+    <div class="battery-list" id="batteryList"></div>
+
+    <div class="btns">
+
+      <button class="btn primary" onclick="saveSession()">Save session</button>
+
+      <button class="btn" onclick="clearAll()">Clear</button>
+
+    </div>
+
   </div>
+
+  <div id="view-history" class="view">
+
+    <div id="histContent"></div>
+
+    <div class="btns">
+
+      <button class="btn danger" onclick="clearHistory()">Clear all history</button>
+
+    </div>
+
+  </div>
+
+  <div id="view-chart" class="view">
+
+    <div class="chart-controls">
+
+      <label>View</label>
+
+      <select id="chartMode" onchange="renderChart()">
+
+        <option value="battery">By battery (cells + average)</option>
+
+        <option value="bank">Bank average over time</option>
+
+      </select>
+
+    </div>
+
+    <div class="chart-controls" id="batPickerWrap">
+
+      <label>Battery</label>
+
+      <select id="batPicker" onchange="renderChart()">
+
+        <option value="1">Battery 1</option>
+
+        <option value="2">Battery 2</option>
+
+        <option value="3">Battery 3</option>
+
+        <option value="4">Battery 4</option>
+
+        <option value="5">Battery 5</option>
+
+        <option value="6">Battery 6</option>
+
+        <option value="7">Battery 7</option>
+
+        <option value="8">Battery 8</option>
+
+      </select>
+
+    </div>
+
+    <div class="chart-wrap">
+
+      <canvas id="myChart"></canvas>
+
+      <div class="chart-empty" id="chartEmpty" style="display:none">No saved sessions yet</div>
+
+    </div>
+
+  </div>
+
 </div>
+
 <div class="overlay" id="overlay">
+
   <div class="modal">
+
     <h3 id="mTitle">Cell reading</h3>
+
     <div class="sub">Enter 4-digit specific gravity reading</div>
+
     <input type="tel" id="mInput" maxlength="4" placeholder="1265" inputmode="numeric" />
-    <div class="hint">e.g. 1265 &nbsp;·&nbsp; 1200 &nbsp;·&nbsp; 1140</div>
+
+    <div class="hint">e.g. 1265 · 1200 · 1140</div>
+
     <div class="scale-row">
+
       <span style="color:#b71c1c">1100 low</span>
+
       <span style="color:#f57f17">1160</span>
+
       <span style="color:#33691e">1240+ good</span>
+
     </div>
+
     <div class="modal-btns">
+
       <button onclick="closeModal()">Cancel</button>
+
       <button class="save" onclick="saveCell()">Save</button>
+
     </div>
+
     <button class="dead-btn" onclick="markDead()">No reading (1000)</button>
+
     <button class="delete-btn" id="deleteBtn" onclick="deleteCell()" style="display:none">Remove reading</button>
+
   </div>
+
 </div>
+
 <script>
+
 const readings = {};
+
 let aB = null, aC = null;
+
+let chartInst = null;
+
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+
 function gc(s){ if(!s) return ''; if(s==='1000') return 'd'; const n=parseInt(s); if(n>=1240) return 'g'; if(n>=1160) return 'y'; return 'r'; }
+
+function switchTab(name){
+
+  document.querySelectorAll('.tab').forEach((t,i)=>{ t.classList.toggle('active', ['log','history','chart'][i]===name); });
+
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+
+  document.getElementById('view-'+name).classList.add('active');
+
+  if(name==='history') renderHistory();
+
+  if(name==='chart') renderChart();
+
+}
+
 function build(){
+
   const list = document.getElementById('batteryList');
+
   list.innerHTML = '';
+
   for(let b=1;b<=8;b++){
+
     const row = document.createElement('div'); row.className = 'bat-row';
+
     const lbl = document.createElement('div'); lbl.className = 'bat-lbl';
+
     lbl.innerHTML = 'Battery '+b+'<br><span style="font-size:11px;font-weight:400;color:#aaa">6V</span>';
+
     row.appendChild(lbl);
+
     const cells = document.createElement('div'); cells.className = 'cells';
+
     for(let c=1;c<=3;c++){
+
       const val = readings[b+'-'+c]; const cl = gc(val);
+
       const w = document.createElement('div'); w.className = 'cell-wrap';
-      w.innerHTML = '<div class="cell-dot '+cl+(val?'':' empty')+'" onclick="openCell('+b+','+c+')">'+(val||'+')+'</div><div class="cell-num">C'+c+'</div>';
+
+      w.innerHTML = '<div class="cell-dot '+cl+(val?'':' empty')+'" onclick="openCell('+b+','+c+')">'+(val||'+')+'<\/div><div class="cell-num">C'+c+'<\/div>';
+
       cells.appendChild(w);
+
     }
+
     row.appendChild(cells); list.appendChild(row);
+
   }
+
 }
+
 function openCell(b,c){
+
   aB=b; aC=c;
-  document.getElementById('mTitle').textContent = 'Battery '+b+' \u00b7 Cell '+c;
+
+  document.getElementById('mTitle').textContent = 'Battery '+b+' · Cell '+c;
+
   const v = readings[b+'-'+c];
+
   document.getElementById('mInput').value = (v && v!=='1000') ? v : '';
+
   document.getElementById('deleteBtn').style.display = v ? 'block' : 'none';
+
   document.getElementById('overlay').classList.add('open');
+
   setTimeout(()=>document.getElementById('mInput').focus(),100);
+
 }
+
 function closeModal(){ document.getElementById('overlay').classList.remove('open'); aB=null; aC=null; }
+
 function saveCell(){
+
   const raw = document.getElementById('mInput').value.trim();
+
   if(raw.length===4 && /^\d{4}$/.test(raw) && parseInt(raw)>=1100 && parseInt(raw)<=1300){
+
     readings[aB+'-'+aC] = raw; build();
+
   } else if(raw.length > 0){
+
     alert('Enter a 4-digit number between 1100 and 1300, or use the "No reading" button.');
+
     return;
+
   }
+
   closeModal();
+
 }
+
 function markDead(){ readings[aB+'-'+aC]='1000'; build(); closeModal(); }
+
 function deleteCell(){ if(aB&&aC){ delete readings[aB+'-'+aC]; build(); } closeModal(); }
+
 document.getElementById('mInput').addEventListener('keydown',e=>{ if(e.key==='Enter') saveCell(); });
+
 document.getElementById('mInput').addEventListener('input',e=>{ if(e.target.value.length===4) e.target.blur(); });
+
 document.getElementById('overlay').addEventListener('click',e=>{ if(e.target===document.getElementById('overlay')) closeModal(); });
+
 function saveSession(){
+
   const keys = Object.keys(readings);
+
   if(!keys.length){ alert('No readings to save yet.'); return; }
+
   const ts = new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+
   const all = JSON.parse(localStorage.getItem('batteryLog')||'[]');
+
   all.push({ts, data:{...readings}});
+
   localStorage.setItem('batteryLog', JSON.stringify(all));
+
   const counts={g:0,y:0,r:0,d:0};
+
   keys.forEach(k=>{ const c=gc(readings[k]); if(c) counts[c]++; });
+
   alert('Saved: '+ts+'\n\nGood: '+counts.g+' | Fair: '+counts.y+' | Low: '+counts.r+' | No reading: '+counts.d);
+
 }
-function toggleHist(){
-  const s = document.getElementById('histSection');
-  const showing = s.style.display !== 'none';
-  s.style.display = showing ? 'none' : 'block';
-  if(!showing) renderHist();
-}
-function renderHist(){
+
+function renderHistory(){
+
   const all = JSON.parse(localStorage.getItem('batteryLog')||'[]');
+
   const el = document.getElementById('histContent');
-  if(!all.length){ el.innerHTML = '<div class="no-hist">No saved sessions yet</div>'; return; }
+
+  if(!all.length){ el.innerHTML = '<div class="no-hist">No saved sessions yet<\/div>'; return; }
+
   el.innerHTML = '';
+
   [...all].reverse().forEach(entry=>{
+
     const counts={g:0,y:0,r:0,d:0};
+
     Object.values(entry.data).forEach(v=>{ const c=gc(v); if(c) counts[c]++; });
-    const d = document.createElement('div'); d.className = 'hist-entry';
-    d.innerHTML = '<span class="ts">'+entry.ts+'</span><br>'
-      +'<span style="color:#33691e">'+counts.g+' good</span> &middot; '
-      +'<span style="color:#f57f17">'+counts.y+' fair</span> &middot; '
-      +'<span style="color:#b71c1c">'+counts.r+' low</span>'
-      +(counts.d ? ' &middot; <span style="color:#444">'+counts.d+' no reading</span>' : '');
+
+    const d = document.createElement('div'); d.className = 'hist-section';
+
+    let cellsHtml = '';
+
+    for(let b=1;b<=8;b++){
+
+      let rowHtml = '<div style="margin-bottom:3px;"><span style="font-size:11px;font-weight:600;color:#888;min-width:24px;display:inline-block;">B'+b+'<\/span> ';
+
+      for(let c=1;c<=3;c++){
+
+        const key=b+'-'+c; const val=entry.data[key]; const cl=gc(val);
+
+        if(val) rowHtml += '<span class="hist-cell '+cl+'">C'+c+'-'+val+'<\/span> ';
+
+        else rowHtml += '<span class="hist-cell" style="background:#eee;color:#aaa;">C'+c+'<\/span> ';
+
+      }
+
+      rowHtml += '<\/div>';
+
+      cellsHtml += rowHtml;
+
+    }
+
+    d.innerHTML = '<div class="hist-title">'+entry.ts+'<\/div>'
+
+      +'<div class="summary" style="font-size:11px;color:#888;margin-bottom:8px;">'
+
+      +'<span style="color:#33691e">'+counts.g+' good<\/span> &middot; '
+
+      +'<span style="color:#f57f17">'+counts.y+' fair<\/span> &middot; '
+
+      +'<span style="color:#b71c1c">'+counts.r+' low<\/span>'
+
+      +(counts.d?' &middot; <span style="color:#444">'+counts.d+' no reading<\/span>':'')
+
+      +'<\/div>'
+
+      +'<div class="hist-cells">'+cellsHtml+'<\/div>';
+
     el.appendChild(d);
+
   });
+
 }
+
+function clearHistory(){
+
+  if(confirm('Delete all saved history? This cannot be undone.')){ localStorage.removeItem('batteryLog'); renderHistory(); }
+
+}
+
 function clearAll(){ if(confirm('Clear all current readings?')){ Object.keys(readings).forEach(k=>delete readings[k]); build(); } }
+
+function renderChart(){
+
+  const all = JSON.parse(localStorage.getItem('batteryLog')||'[]');
+
+  const empty = document.getElementById('chartEmpty');
+
+  const canvas = document.getElementById('myChart');
+
+  const mode = document.getElementById('chartMode').value;
+
+  const batPickerWrap = document.getElementById('batPickerWrap');
+
+  batPickerWrap.style.display = mode==='battery' ? 'block' : 'none';
+
+  if(!all.length){ empty.style.display='block'; canvas.style.display='none'; return; }
+
+  empty.style.display='none'; canvas.style.display='block';
+
+  const labels = all.map(s=>s.ts);
+
+  let datasets = [];
+
+  const cellColors = ['#1D9E75','#378ADD','#D85A30'];
+
+  if(mode==='battery'){
+
+    const b = parseInt(document.getElementById('batPicker').value);
+
+    for(let c=1;c<=3;c++){
+
+      const key=b+'-'+c;
+
+      datasets.push({
+
+        label:'C'+c,
+
+        data: all.map(s=>{ const v=s.data[key]; return (v && v!=='1000') ? parseInt(v) : null; }),
+
+        borderColor: cellColors[c-1],
+
+        backgroundColor: cellColors[c-1]+'33',
+
+        tension: 0.3,
+
+        spanGaps: false,
+
+        pointRadius: 4,
+
+      });
+
+    }
+
+    const avgData = all.map(s=>{
+
+      let sum=0, cnt=0;
+
+      for(let c=1;c<=3;c++){ const v=s.data[b+'-'+c]; if(v && v!=='1000'){ sum+=parseInt(v); cnt++; } }
+
+      return cnt ? Math.round(sum/cnt) : null;
+
+    });
+
+    datasets.push({ label:'Avg', data: avgData, borderColor:'#888', borderDash:[5,3], backgroundColor:'transparent', tension:0.3, spanGaps:false, pointRadius:3 });
+
+  } else {
+
+    const avgData = all.map(s=>{
+
+      let sum=0, cnt=0;
+
+      for(let b=1;b<=8;b++) for(let c=1;c<=3;c++){ const v=s.data[b+'-'+c]; if(v && v!=='1000'){ sum+=parseInt(v); cnt++; } }
+
+      return cnt ? Math.round(sum/cnt) : null;
+
+    });
+
+    datasets.push({ label:'Bank avg', data: avgData, borderColor:'#1D9E75', backgroundColor:'#1D9E7533', tension:0.3, spanGaps:false, pointRadius:4, fill:true });
+
+  }
+
+  if(chartInst) chartInst.destroy();
+
+  chartInst = new Chart(canvas, {
+
+    type:'line',
+
+    data:{ labels, datasets },
+
+    options:{
+
+      responsive:true,
+
+      interaction:{ mode:'index', intersect:false },
+
+      plugins:{ legend:{ position:'bottom', labels:{ font:{ size:12 }, boxWidth:12 } } },
+
+      scales:{
+
+        y:{
+
+          min:1080, max:1320,
+
+          ticks:{ stepSize:20, font:{ size:11 } },
+
+          grid:{ color:'#eee' }
+
+        },
+
+        x:{ ticks:{ font:{ size:10 }, maxRotation:45 }, grid:{ display:false } }
+
+      }
+
+    }
+
+  });
+
+}
+
 build();
+
 </script>
+
 </body>
+
 </html>

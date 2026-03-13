@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cell Log">
+<title>Battery cell log</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+.app { max-width: 480px; margin: 0 auto; padding: 1rem; }
+h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.date { font-size: 13px; color: #666; margin-bottom: 12px; }
+.legend { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.li { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #555; }
+.ld { width: 11px; height: 11px; border-radius: 50%; }
+.ld.g { background: #8bc34a; } .ld.y { background: #ffc107; } .ld.r { background: #ef5350; }
+.ld.e { background: #ddd; border: 1px solid #bbb; }
+.battery-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.bat-row { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.bat-lbl { font-size: 13px; font-weight: 600; color: #444; min-width: 70px; }
+.cells { display: flex; gap: 10px; align-items: center; }
+.cell-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.cell-dot { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; background: #f0f0f0; color: #888; transition: transform 0.1s; user-select: none; }
+.cell-dot:active { transform: scale(0.9); }
+.cell-dot.g { background: #dcedc8; border-color: #8bc34a; color: #33691e; }
+.cell-dot.y { background: #fff9c4; border-color: #ffc107; color: #f57f17; }
+.cell-dot.r { background: #ffcdd2; border-color: #ef5350; color: #b71c1c; }
+.cell-num { font-size: 11px; color: #999; }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border-radius: 10px; border: 1.5px solid #ccc; cursor: pointer; background: #fff; color: #333; }
+.btn.primary { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+.hist-section { background: #fff; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.hist-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+.hist-entry { font-size: 12px; color: #555; padding: 6px 8px; background: #f8f8f5; border-radius: 8px; margin-bottom: 6px; }
+.hist-entry .ts { font-weight: 600; color: #222; }
+.no-hist { font-size: 13px; color: #aaa; text-align: center; padding: 12px 0; }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: flex-end; justify-content: center; }
+.overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem 1.25rem; width: 100%; max-width: 480px; }
+.modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.modal .sub { font-size: 12px; color: #777; margin-bottom: 14px; }
+.modal input { width: 100%; font-size: 28px; font-weight: 600; text-align: center; padding: 12px; border: 1.5px solid #ddd; border-radius: 12px; background: #f8f8f5; color: #1a1a1a; margin-bottom: 8px; outline: none; }
+.modal input:focus { border-color: #1D9E75; }
+.scale-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 14px; color: #888; }
+.modal-btns { display: flex; gap: 10px; }
+.modal-btns button { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #ddd; font-size: 15px; font-weight: 500; cursor: pointer; background: #f0f0f0; color: #333; }
+.modal-btns .save { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+.delete-btn { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #ffcdd2; font-size: 14px; color: #b71c1c; background: #fff; cursor: pointer; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Battery cell log</h1>
+  <div class="date" id="today"></div>
+  <div class="legend">
+    <div class="li"><div class="ld g"></div>Good &ge;1.265</div>
+    <div class="li"><div class="ld y"></div>Fair 1.235&ndash;1.264</div>
+    <div class="li"><div class="ld r"></div>Low &lt;1.235</div>
+    <div class="li"><div class="ld e"></div>Not set</div>
+  </div>
+  <div class="battery-list" id="batteryList"></div>
+  <div class="btns">
+    <button class="btn primary" onclick="saveSession()">Save session</button>
+    <button class="btn" onclick="toggleHist()">History</button>
+    <button class="btn" onclick="clearAll()">Clear</button>
+  </div>
+  <div id="histSection" style="display:none">
+    <div class="hist-section">
+      <div class="hist-title">Past sessions</div>
+      <div id="histContent"></div>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3 id="mTitle">Cell reading</h3>
+    <div class="sub">Enter specific gravity (hydrometer reading)</div>
+    <input type="number" id="mInput" step="0.001" min="1.1" max="1.3" inputmode="decimal" placeholder="1.265" />
+    <div class="scale-row">
+      <span style="color:#b71c1c">1.100 discharged</span>
+      <span style="color:#f57f17">1.235</span>
+      <span style="color:#33691e">1.265+ full</span>
+    </div>
+    <div class="modal-btns">
+      <button onclick="closeModal()">Cancel</button>
+      <button class="save" onclick="saveCell()">Save</button>
+    </div>
+    <button class="delete-btn" id="deleteBtn" onclick="deleteCell()" style="display:none">Remove reading</button>
+  </div>
+</div>
+<script>
+const readings = {};
+let aB = null, aC = null;
+document.getElementById('today').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+function gc(v){ if(!v) return ''; const n=parseFloat(v); if(n>=1.265) return 'g'; if(n>=1.235) return 'y'; return 'r'; }
+function build(){
+  const list = document.getElementById('batteryList');
+  list.innerHTML = '';
+  for(let b=1;b<=8;b++){
+    const row = document.createElement('div'); row.className = 'bat-row';
+    const lbl = document.createElement('div'); lbl.className = 'bat-lbl';
+    lbl.innerHTML = 'Battery '+b+'<br><span style="font-size:11px;font-weight:400;color:#aaa">6V</span>';
+    row.appendChild(lbl);
+    const cells = document.createElement('div'); cells.className = 'cells';
+    for(let c=1;c<=3;c++){
+      const val = readings[b+'-'+c]; const cl = gc(val);
+      const w = document.createElement('div'); w.className = 'cell-wrap';
+      w.innerHTML = '<div class="cell-dot '+cl+'" onclick="openCell('+b+','+c+')">'+(val ? parseFloat(val).toFixed(3) : '+')+'</div><div class="cell-num">C'+c+'</div>';
+      cells.appendChild(w);
+    }
+    row.appendChild(cells); list.appendChild(row);
+  }
+}
+function openCell(b,c){
+  aB=b; aC=c;
+  document.getElementById('mTitle').textContent = 'Battery '+b+' \u00b7 Cell '+c;
+  const v = readings[b+'-'+c];
+  document.getElementById('mInput').value = v||'';
+  document.getElementById('deleteBtn').style.display = v ? 'block' : 'none';
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('mInput').focus(),100);
+}
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); aB=null; aC=null; }
+function saveCell(){
+  const v = document.getElementById('mInput').value;
+  if(v && parseFloat(v)>=1.0 && parseFloat(v)<=1.4){ readings[aB+'-'+aC] = v; build(); }
+  closeModal();
+}
+function deleteCell(){ if(aB && aC){ delete readings[aB+'-'+aC]; build(); } closeModal(); }
+document.getElementById('mInput').addEventListener('keydown',e=>{ if(e.key==='Enter') saveCell(); });
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target===document.getElementById('overlay')) closeModal(); });
+function saveSession(){
+  const keys = Object.keys(readings);
+  if(!keys.length){ alert('No readings to save yet.'); return; }
+  const ts = new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  const all = JSON.parse(localStorage.getItem('batteryLog')||'[]');
+  all.push({ts, data:{...readings}});
+  localStorage.setItem('batteryLog', JSON.stringify(all));
+  const counts={g:0,y:0,r:0};
+  keys.forEach(k=>{ const c=gc(readings[k]); if(c) counts[c]++; });
+  alert('Saved: '+ts+'\n\nGood: '+counts.g+' | Fair: '+counts.y+' | Low: '+counts.r);
+}
+function toggleHist(){
+  const s = document.getElementById('histSection');
+  const showing = s.style.display !== 'none';
+  s.style.display = showing ? 'none' : 'block';
+  if(!showing) renderHist();
+}
+function renderHist(){
+  const all = JSON.parse(localStorage.getItem('batteryLog')||'[]');
+  const el = document.getElementById('histContent');
+  if(!all.length){ el.innerHTML = '<div class="no-hist">No saved sessions yet</div>'; return; }
+  el.innerHTML = '';
+  [...all].reverse().forEach(entry=>{
+    const counts={g:0,y:0,r:0};
+    Object.values(entry.data).forEach(v=>{ const c=gc(v); if(c) counts[c]++; });
+    const d = document.createElement('div'); d.className = 'hist-entry';
+    d.innerHTML = '<span class="ts">'+entry.ts+'</span><br><span style="color:#33691e">'+counts.g+' good</span> &middot; <span style="color:#f57f17">'+counts.y+' fair</span> &middot; <span style="color:#b71c1c">'+counts.r+' low</span>';
+    el.appendChild(d);
+  });
+}
+function clearAll(){ if(confirm('Clear all current readings?')){ Object.keys(readings).forEach(k=>delete readings[k]); build(); } }
+build();
+</script>
+</body>
+</html>

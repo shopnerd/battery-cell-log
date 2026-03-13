@@ -56,9 +56,9 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
   <h1>Battery cell log</h1>
   <div class="date" id="today"></div>
   <div class="legend">
-    <div class="li"><div class="ld g"></div>Good &ge;1.265</div>
-    <div class="li"><div class="ld y"></div>Fair 1.235&ndash;1.264</div>
-    <div class="li"><div class="ld r"></div>Low &lt;1.235</div>
+    <div class="li"><div class="ld g"></div>Good 1.240&ndash;1.300</div>
+    <div class="li"><div class="ld y"></div>Fair 1.160&ndash;1.239</div>
+    <div class="li"><div class="ld r"></div>Low 1.100&ndash;1.159</div>
     <div class="li"><div class="ld e"></div>Not set</div>
   </div>
   <div class="battery-list" id="batteryList"></div>
@@ -80,9 +80,9 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
     <div class="sub">Enter specific gravity (hydrometer reading)</div>
     <input type="number" id="mInput" step="0.001" min="1.1" max="1.3" inputmode="decimal" placeholder="1.265" />
     <div class="scale-row">
-      <span style="color:#b71c1c">1.100 discharged</span>
-      <span style="color:#f57f17">1.235</span>
-      <span style="color:#33691e">1.265+ full</span>
+      <span style="color:#b71c1c">1.100 low</span>
+      <span style="color:#f57f17">1.160</span>
+      <span style="color:#33691e">1.240+ good</span>
     </div>
     <div class="modal-btns">
       <button onclick="closeModal()">Cancel</button>
@@ -95,7 +95,7 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 const readings = {};
 let aB = null, aC = null;
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-function gc(v){ if(!v) return ''; const n=parseFloat(v); if(n>=1.265) return 'g'; if(n>=1.235) return 'y'; return 'r'; }
+function gc(v){ if(!v) return ''; const n=parseFloat(v); if(n>=1.240) return 'g'; if(n>=1.160) return 'y'; return 'r'; }
 function build(){
   const list = document.getElementById('batteryList');
   list.innerHTML = '';

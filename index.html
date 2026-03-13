@@ -23,7 +23,7 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 .bat-lbl { font-size: 13px; font-weight: 600; color: #444; min-width: 70px; }
 .cells { display: flex; gap: 10px; align-items: center; }
 .cell-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.cell-dot { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; background: #f0f0f0; color: #888; transition: transform 0.1s; user-select: none; }
+.cell-dot { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; background: #f0f0f0; color: #888; transition: transform 0.1s; user-select: none; }
 .cell-dot:active { transform: scale(0.9); }
 .cell-dot.g { background: #dcedc8; border-color: #8bc34a; color: #33691e; }
 .cell-dot.y { background: #fff9c4; border-color: #ffc107; color: #f57f17; }
@@ -96,6 +96,7 @@ const readings = {};
 let aB = null, aC = null;
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 function gc(v){ if(!v) return ''; const n=parseFloat(v); if(n>=1.240) return 'g'; if(n>=1.160) return 'y'; return 'r'; }
+function fmt(v){ return v ? String(Math.round(parseFloat(v)*1000)).slice(1) : '+'; }
 function build(){
   const list = document.getElementById('batteryList');
   list.innerHTML = '';
@@ -108,7 +109,7 @@ function build(){
     for(let c=1;c<=3;c++){
       const val = readings[b+'-'+c]; const cl = gc(val);
       const w = document.createElement('div'); w.className = 'cell-wrap';
-      w.innerHTML = '<div class="cell-dot '+cl+'" onclick="openCell('+b+','+c+')">'+(val ? parseFloat(val).toFixed(3) : '+')+'</div><div class="cell-num">C'+c+'</div>';
+      w.innerHTML = '<div class="cell-dot '+cl+'" onclick="openCell('+b+','+c+')">'+fmt(val)+'</div><div class="cell-num">C'+c+'</div>';
       cells.appendChild(w);
     }
     row.appendChild(cells); list.appendChild(row);

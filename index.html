@@ -15,19 +15,21 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 .date { font-size: 13px; color: #666; margin-bottom: 12px; }
 .legend { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .li { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #555; }
-.ld { width: 11px; height: 11px; border-radius: 50%; }
+.ld { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
 .ld.g { background: #8bc34a; } .ld.y { background: #ffc107; } .ld.r { background: #ef5350; }
-.ld.e { background: #ddd; border: 1px solid #bbb; }
+.ld.d { background: #2a2a2a; } .ld.e { background: #ddd; border: 1px solid #bbb; }
 .battery-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .bat-row { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 .bat-lbl { font-size: 13px; font-weight: 600; color: #444; min-width: 70px; }
 .cells { display: flex; gap: 10px; align-items: center; }
 .cell-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.cell-dot { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; background: #f0f0f0; color: #888; transition: transform 0.1s; user-select: none; }
+.cell-dot { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; background: #f0f0f0; color: #888; transition: transform 0.1s; user-select: none; letter-spacing: -0.5px; }
 .cell-dot:active { transform: scale(0.9); }
 .cell-dot.g { background: #dcedc8; border-color: #8bc34a; color: #33691e; }
 .cell-dot.y { background: #fff9c4; border-color: #ffc107; color: #f57f17; }
 .cell-dot.r { background: #ffcdd2; border-color: #ef5350; color: #b71c1c; }
+.cell-dot.d { background: #2a2a2a; border-color: #111; color: #fff; }
+.cell-dot.empty { font-size: 16px; font-weight: 400; }
 .cell-num { font-size: 11px; color: #999; }
 .btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border-radius: 10px; border: 1.5px solid #ccc; cursor: pointer; background: #fff; color: #333; }
@@ -42,12 +44,14 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem 1.25rem; width: 100%; max-width: 480px; }
 .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
 .modal .sub { font-size: 12px; color: #777; margin-bottom: 14px; }
-.modal input { width: 100%; font-size: 28px; font-weight: 600; text-align: center; padding: 12px; border: 1.5px solid #ddd; border-radius: 12px; background: #f8f8f5; color: #1a1a1a; margin-bottom: 8px; outline: none; }
+.modal input { width: 100%; font-size: 32px; font-weight: 700; text-align: center; padding: 12px; border: 1.5px solid #ddd; border-radius: 12px; background: #f8f8f5; color: #1a1a1a; margin-bottom: 4px; outline: none; letter-spacing: 4px; }
 .modal input:focus { border-color: #1D9E75; }
-.scale-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 14px; color: #888; }
+.hint { font-size: 11px; color: #aaa; text-align: center; margin-bottom: 10px; }
+.scale-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 14px; }
 .modal-btns { display: flex; gap: 10px; }
 .modal-btns button { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #ddd; font-size: 15px; font-weight: 500; cursor: pointer; background: #f0f0f0; color: #333; }
 .modal-btns .save { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+.dead-btn { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #888; font-size: 14px; color: #fff; background: #2a2a2a; cursor: pointer; margin-top: 8px; }
 .delete-btn { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #ffcdd2; font-size: 14px; color: #b71c1c; background: #fff; cursor: pointer; margin-top: 8px; }
 </style>
 </head>
@@ -56,9 +60,10 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
   <h1>Battery cell log</h1>
   <div class="date" id="today"></div>
   <div class="legend">
-    <div class="li"><div class="ld g"></div>Good 1.240&ndash;1.300</div>
-    <div class="li"><div class="ld y"></div>Fair 1.160&ndash;1.239</div>
-    <div class="li"><div class="ld r"></div>Low 1.100&ndash;1.159</div>
+    <div class="li"><div class="ld g"></div>Good 1240–1300</div>
+    <div class="li"><div class="ld y"></div>Fair 1160–1239</div>
+    <div class="li"><div class="ld r"></div>Low 1100–1159</div>
+    <div class="li"><div class="ld d"></div>No reading</div>
     <div class="li"><div class="ld e"></div>Not set</div>
   </div>
   <div class="battery-list" id="batteryList"></div>
@@ -77,17 +82,19 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 <div class="overlay" id="overlay">
   <div class="modal">
     <h3 id="mTitle">Cell reading</h3>
-    <div class="sub">Enter specific gravity (hydrometer reading)</div>
-    <input type="number" id="mInput" step="0.001" min="1.1" max="1.3" inputmode="decimal" placeholder="1.265" />
+    <div class="sub">Enter 4-digit specific gravity reading</div>
+    <input type="tel" id="mInput" maxlength="4" placeholder="1265" inputmode="numeric" />
+    <div class="hint">e.g. 1265 &nbsp;·&nbsp; 1200 &nbsp;·&nbsp; 1140</div>
     <div class="scale-row">
-      <span style="color:#b71c1c">1.100 low</span>
-      <span style="color:#f57f17">1.160</span>
-      <span style="color:#33691e">1.240+ good</span>
+      <span style="color:#b71c1c">1100 low</span>
+      <span style="color:#f57f17">1160</span>
+      <span style="color:#33691e">1240+ good</span>
     </div>
     <div class="modal-btns">
       <button onclick="closeModal()">Cancel</button>
       <button class="save" onclick="saveCell()">Save</button>
     </div>
+    <button class="dead-btn" onclick="markDead()">No reading (1000)</button>
     <button class="delete-btn" id="deleteBtn" onclick="deleteCell()" style="display:none">Remove reading</button>
   </div>
 </div>
@@ -95,8 +102,7 @@ h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 const readings = {};
 let aB = null, aC = null;
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-function gc(v){ if(!v) return ''; const n=parseFloat(v); if(n>=1.240) return 'g'; if(n>=1.160) return 'y'; return 'r'; }
-function fmt(v){ return v ? String(Math.round(parseFloat(v)*1000)).slice(1) : '+'; }
+function gc(s){ if(!s) return ''; if(s==='1000') return 'd'; const n=parseInt(s); if(n>=1240) return 'g'; if(n>=1160) return 'y'; return 'r'; }
 function build(){
   const list = document.getElementById('batteryList');
   list.innerHTML = '';
@@ -109,7 +115,7 @@ function build(){
     for(let c=1;c<=3;c++){
       const val = readings[b+'-'+c]; const cl = gc(val);
       const w = document.createElement('div'); w.className = 'cell-wrap';
-      w.innerHTML = '<div class="cell-dot '+cl+'" onclick="openCell('+b+','+c+')">'+fmt(val)+'</div><div class="cell-num">C'+c+'</div>';
+      w.innerHTML = '<div class="cell-dot '+cl+(val?'':' empty')+'" onclick="openCell('+b+','+c+')">'+(val||'+')+'</div><div class="cell-num">C'+c+'</div>';
       cells.appendChild(w);
     }
     row.appendChild(cells); list.appendChild(row);
@@ -119,19 +125,26 @@ function openCell(b,c){
   aB=b; aC=c;
   document.getElementById('mTitle').textContent = 'Battery '+b+' \u00b7 Cell '+c;
   const v = readings[b+'-'+c];
-  document.getElementById('mInput').value = v||'';
+  document.getElementById('mInput').value = (v && v!=='1000') ? v : '';
   document.getElementById('deleteBtn').style.display = v ? 'block' : 'none';
   document.getElementById('overlay').classList.add('open');
   setTimeout(()=>document.getElementById('mInput').focus(),100);
 }
 function closeModal(){ document.getElementById('overlay').classList.remove('open'); aB=null; aC=null; }
 function saveCell(){
-  const v = document.getElementById('mInput').value;
-  if(v && parseFloat(v)>=1.0 && parseFloat(v)<=1.4){ readings[aB+'-'+aC] = v; build(); }
+  const raw = document.getElementById('mInput').value.trim();
+  if(raw.length===4 && /^\d{4}$/.test(raw) && parseInt(raw)>=1100 && parseInt(raw)<=1300){
+    readings[aB+'-'+aC] = raw; build();
+  } else if(raw.length > 0){
+    alert('Enter a 4-digit number between 1100 and 1300, or use the "No reading" button.');
+    return;
+  }
   closeModal();
 }
-function deleteCell(){ if(aB && aC){ delete readings[aB+'-'+aC]; build(); } closeModal(); }
+function markDead(){ readings[aB+'-'+aC]='1000'; build(); closeModal(); }
+function deleteCell(){ if(aB&&aC){ delete readings[aB+'-'+aC]; build(); } closeModal(); }
 document.getElementById('mInput').addEventListener('keydown',e=>{ if(e.key==='Enter') saveCell(); });
+document.getElementById('mInput').addEventListener('input',e=>{ if(e.target.value.length===4) e.target.blur(); });
 document.getElementById('overlay').addEventListener('click',e=>{ if(e.target===document.getElementById('overlay')) closeModal(); });
 function saveSession(){
   const keys = Object.keys(readings);
@@ -140,9 +153,9 @@ function saveSession(){
   const all = JSON.parse(localStorage.getItem('batteryLog')||'[]');
   all.push({ts, data:{...readings}});
   localStorage.setItem('batteryLog', JSON.stringify(all));
-  const counts={g:0,y:0,r:0};
+  const counts={g:0,y:0,r:0,d:0};
   keys.forEach(k=>{ const c=gc(readings[k]); if(c) counts[c]++; });
-  alert('Saved: '+ts+'\n\nGood: '+counts.g+' | Fair: '+counts.y+' | Low: '+counts.r);
+  alert('Saved: '+ts+'\n\nGood: '+counts.g+' | Fair: '+counts.y+' | Low: '+counts.r+' | No reading: '+counts.d);
 }
 function toggleHist(){
   const s = document.getElementById('histSection');
@@ -156,10 +169,14 @@ function renderHist(){
   if(!all.length){ el.innerHTML = '<div class="no-hist">No saved sessions yet</div>'; return; }
   el.innerHTML = '';
   [...all].reverse().forEach(entry=>{
-    const counts={g:0,y:0,r:0};
+    const counts={g:0,y:0,r:0,d:0};
     Object.values(entry.data).forEach(v=>{ const c=gc(v); if(c) counts[c]++; });
     const d = document.createElement('div'); d.className = 'hist-entry';
-    d.innerHTML = '<span class="ts">'+entry.ts+'</span><br><span style="color:#33691e">'+counts.g+' good</span> &middot; <span style="color:#f57f17">'+counts.y+' fair</span> &middot; <span style="color:#b71c1c">'+counts.r+' low</span>';
+    d.innerHTML = '<span class="ts">'+entry.ts+'</span><br>'
+      +'<span style="color:#33691e">'+counts.g+' good</span> &middot; '
+      +'<span style="color:#f57f17">'+counts.y+' fair</span> &middot; '
+      +'<span style="color:#b71c1c">'+counts.r+' low</span>'
+      +(counts.d ? ' &middot; <span style="color:#444">'+counts.d+' no reading</span>' : '');
     el.appendChild(d);
   });
 }

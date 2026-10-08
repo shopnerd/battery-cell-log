@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -115,7 +115,7 @@ html.l-es .en, html.l-en .es{display:none!important}
 
   <section id="now">
     <h2><span class="ph">◫</span><span class="en">How it's wired right now (Oct 8)</span><span class="es">Cómo está conectado ahora (8 oct)</span></h2>
-    <p class="note"><span class="en">Drawn from the site photos. Dashed red boxes are parts that should be there and aren't. Items marked "?" need confirming.</span><span class="es">Dibujado de las fotos del sitio. Las cajas rojas punteadas son piezas que faltan. Lo marcado "?" hay que confirmar.</span></p>
+    <p class="note"><a href="https://shopnerd.github.io/battery-cell-log/power-photos/">Photo gallery →</a> <span class="en">Drawn from the site photos. Dashed red boxes are parts that should be there and aren't. Items marked "?" need confirming.</span><span class="es">Dibujado de las fotos del sitio. Las cajas rojas punteadas son piezas que faltan. Lo marcado "?" hay que confirmar.</span></p>
     <div class="tablewrap">
     <svg class="dia" viewBox="0 0 820 640" role="img" aria-label="Current wiring diagram of the Encino Solo solar system">
       <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="fpv"/></marker></defs>
@@ -275,7 +275,7 @@ html.l-es .en, html.l-en .es{display:none!important}
     <h3><span class="en">Battery bank (24 V, 25.6 kWh)</span><span class="es">Banco de baterías (24 V, 25.6 kWh)</span></h3>
     <div class="tablewrap"><table>
       <tr><th><span class="en">Part</span><span class="es">Pieza</span></th><th><span class="en">Spec</span><span class="es">Dato</span></th><th>src</th></tr>
-      <tr><td><span class="en">Packs</span><span class="es">Baterías</span></td><td>10 × LiFePO4 (CATL cells) 25.6 V · 100 Ah · 2.56 kWh, 8 cells in series, all 10 in parallel = 1,000 Ah</td><td>confirm</td></tr>
+      <tr><td><span class="en">Packs</span><span class="es">Baterías</span></td><td>10 × module LBM025100A (CATL LFP100Ah cells, 8 in series), electricity box LBB025100A · 25.6 V · 100 Ah · 2.56 kWh · operating 22.4–28.8 V · charge 0–55 °C · max continuous charge 0.5C (50 A) / discharge 0.7C (70 A). All 10 in parallel = 1,000 Ah</td><td>label</td></tr>
       <tr><td><span class="en">Pack front</span><span class="es">Frente de batería</span></td><td><span class="en">+ / − plug connectors, COM port, SWITCH breaker</span><span class="es">conectores + / −, puerto COM, breaker SWITCH</span></td><td>seen</td></tr>
       <tr><td><span class="en">Resting voltage before install</span><span class="es">Voltaje en reposo antes de instalar</span></td><td class="v">26.2 V (#8: 26.1 V)</td><td>label</td></tr>
       <tr><td>BMS (×10)</td><td>Daly Mini-red Smart BMS <b>R10K</b>, LiFePO4 8S 24 V, 100 A charge / 100 A discharge, passive balancing 70–100 mA from 3.4 V, NTC 10 K, Bluetooth via UART, 65 × 125 × 18.8 mm</td><td>label · sheet</td></tr>
@@ -287,7 +287,7 @@ html.l-es .en, html.l-en .es{display:none!important}
       <tr><th><span class="en">Part</span><span class="es">Pieza</span></th><th><span class="en">Spec</span><span class="es">Dato</span></th><th>src</th></tr>
       <tr><td><span class="en">Array A (on roof before)</span><span class="es">Arreglo A (ya en el techo)</span></td><td>8 × JA Solar JAP72S10-345/SC: 345 W · Voc 46.07 V · Vmp 38.25 V · Isc 9.50 A · Imp 9.02 A · max system 1500 V · <b>2,760 W</b></td><td>label</td></tr>
       <tr><td><span class="en">Array B (new)</span><span class="es">Arreglo B (nuevo)</span></td><td>8 × Canadian Solar CS6P-235PX: 235 W · Voc 36.9 V · Vmp 29.8 V · Isc 8.46 A · Imp 7.90 A · max series fuse 15 A · max system 600 V · <b>1,880 W</b></td><td>label</td></tr>
-      <tr><td><span class="en">Stringing</span><span class="es">Series</span></td><td><span class="en">Plan: 2 strings of 4 per array. JA: never more than 4 in series (5 × 46.07 V ≈ 250 V on a cold morning). Classic read 61.6 V input on Oct 8, which suggests its array is wired 2 in series.</span><span class="es">Plan: 2 series de 4 por arreglo. JA: nunca más de 4 en serie (5 × 46.07 V ≈ 250 V en mañana fría). El Classic marcó 61.6 V de entrada el 8 oct, lo que sugiere que su arreglo está en series de 2.</span></td><td>confirm</td></tr>
+      <tr><td><span class="en">Stringing</span><span class="es">Series</span></td><td><span class="en">JA: never more than 4 in series (5 × 46.07 V ≈ 250 V on a cold morning). Classic charging at 1:30 pm Oct 8: PV in 51.3 V, 40 A, 1,096 W, which fits Canadian panels wired 2 in series.</span><span class="es">Plan: 2 series de 4 por arreglo. JA: nunca más de 4 en serie (5 × 46.07 V ≈ 250 V en mañana fría). El Classic marcó 61.6 V de entrada el 8 oct, lo que sugiere que su arreglo está en series de 2.</span></td><td>confirm</td></tr>
       <tr><td><span class="en">Which array on which controller</span><span class="es">Qué arreglo va a qué controlador</span></td><td><span class="en">Recommended: JA (2,760 W) → Victron; Canadian (1,880 W) → Classic</span><span class="es">Recomendado: JA (2,760 W) → Victron; Canadian (1,880 W) → Classic</span></td><td>confirm</td></tr>
       <tr><td><span class="en">PV breakers</span><span class="es">Breakers solares</span></td><td><span class="en">White DIN box. Old ABB SH201 C50 are AC-rated; replacements bought: 2 × MidNite MNEPV30-300-1PP (30 A, 300 V DC) + MNSPD-300-DC surge protector</span><span class="es">Caja DIN blanca. Los ABB SH201 C50 viejos son para AC; repuestos comprados: 2 × MidNite MNEPV30-300-1PP (30 A, 300 V DC) + supresor MNSPD-300-DC</span></td><td>confirm</td></tr>
     </table></div>

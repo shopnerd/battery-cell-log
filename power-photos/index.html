@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Encino Solo Power Photos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: same field-sheet identity as the battery work order — header, photo grid, tap to enlarge with caption */
+:root{
+  --bg:#eef0f2; --sheet:#ffffff; --ink:#1b2127; --muted:#5b6670; --rule:#d5dadf;
+  --accent:#e2591b; --bad:#b3261e; --warn:#a86a00; --ok:#2f7d4f;
+  --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14181c; --sheet:#1c2228; --ink:#e7ebee; --muted:#9aa6b0; --rule:#323b44;
+  --accent:#ff7a3d; --bad:#ff7b72; --warn:#e3a53a; --ok:#5cc187; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14181c; --sheet:#1c2228; --ink:#e7ebee; --muted:#9aa6b0; --rule:#323b44;
+  --accent:#ff7a3d; --bad:#ff7b72; --warn:#e3a53a; --ok:#5cc187; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:17px/1.5 var(--body)}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:16px;padding-block:20px 60px;display:grid;gap:20px}
+h1{font-family:var(--display);font-size:2.1rem;margin:0;line-height:1.1;text-wrap:balance}
+.eyebrow{font:600 .78rem var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end}
+.top a{color:var(--accent);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.card{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;min-width:0}
+.card button{all:unset;cursor:zoom-in;display:block}
+.card button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--rule)}
+.cap{padding:10px 12px 12px;display:grid;gap:4px}
+.cap b{font-family:var(--display);font-size:1.05rem;line-height:1.2}
+.cap span{font-size:.9rem;color:var(--muted)}
+.flag{font-size:.85rem;color:var(--warn);font-weight:600}
+.num{font:500 .75rem var(--mono);color:var(--accent)}
+dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1200px);width:100%}
+dialog::backdrop{background:rgba(10,12,14,.88)}
+.lb{display:grid;gap:10px}
+.lb img{max-width:100%;max-height:78vh;margin:0 auto;display:block;border-radius:6px}
+.lb .cap{background:var(--sheet);border-radius:6px;color:var(--ink)}
+.nav{display:flex;justify-content:space-between;gap:8px}
+.nav button{font:600 .95rem var(--body);background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:6px;padding:8px 14px;cursor:pointer}
+.nav button:focus-visible{outline:2px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Encino Solo · 24 V solar + LiFePO4 · photos Oct 8, 2026</div>
+      <h1>Power system photos</h1>
+    </div>
+    <a href="https://shopnerd.github.io/battery-cell-log/battery-job/#en">Work order + wiring diagram →</a>
+  </header>
+  <ul class="grid" id="grid"></ul>
+</div>
+
+<dialog id="dlg" aria-label="Photo">
+  <div class="lb">
+    <img id="big" alt="">
+    <div class="cap" id="bigcap"></div>
+    <div class="nav"><button id="prev" type="button">← Previous</button><button id="close" type="button">Close</button><button id="next" type="button">Next →</button></div>
+  </div>
+</dialog>
+
+<script>
+var P=[
+ ["01-closet.jpg","Power closet, full view","Controllers, Cerbo GX and MultiPlus on the wall; 10 battery packs on the two-shelf rack below.",""],
+ ["02-wall.jpg","Equipment wall","Left to right: white PV breaker box, Victron SmartSolar 250/100, Cerbo GX (top), MidNite Classic 250, MultiPlus 24/3000/70, AC panel (lower right). Main breaker and SmartShunt sit in the wire bundle below the controllers.",""],
+ ["03-rack.jpg","Battery rack, 10 packs","Top shelf #1–5, bottom #6–10. Each pack's + and − lead is spliced with tape onto two black 4 AWG trunk wires running along the shelf edge.","Needs bus bars in place of taped splices; packs not strapped down."],
+ ["04-pack-front.jpg","Pack front panel","Orange + and black − plug connectors, COM port, SWITCH breaker. Labels read BAT+ and Control BOX+.",""],
+ ["05-pack-label.jpg","Pack spec label","CATL LFP100Ah cells · module LBM025100A · electricity box LBB025100A · 25.6 V · 100 Ah · 2.56 kWh · operating 22.4–28.8 V · charge 0–55 °C · max continuous charge 0.5C (50 A) · max continuous discharge 0.7C (70 A) · serial ZNBBBA0014822103230.",""],
+ ["06-breaker-shunt.jpg","Main breaker + SmartShunt","150 A DC breaker on the main positive (orange trip lever, blue reset). Victron SmartShunt on the main negative. Small red/black leads with inline fuses power the Cerbo.","No Class T fuse yet. SmartShunt not connected to the Cerbo."],
+ ["07-multiplus.jpg","Victron MultiPlus 24/3000/70","Inverter/charger, 3,000 VA, 120 V AC, 70 A charger, 50 A transfer. Yellow cords are the AC (generator) input; thick red/black are the DC battery cables.",""],
+ ["08-cerbo.jpg","Cerbo GX (after fix)","Gray cable now in VE.Bus to the MultiPlus; black internet cable in the Ethernet port. TP-Link WiFi stick in USB. Reports to VRM \"Encino Solo\".",""],
+ ["09-cerbo-ports.jpg","Cerbo GX ports","Top row: VE.Can 2, VE.Can 1, VE.Bus. Bottom row: 3 × USB, HDMI, VE.Direct 1–3, Ethernet.","Victron charge controller (VE.Can) and SmartShunt (VE.Direct) still to connect."],
+ ["10-victron-mppt.jpg","Victron SmartSolar MPPT 250/100-Tr VE.Can","250 V PV max, 100 A charge, ~2,900 W usable on 24 V, Bluetooth. Screw terminals: battery left, PV right.","Battery leads look thin for 100 A; no breaker of its own."],
+ ["11-classic.jpg","MidNite Classic 250, charging","Reading at 1:30 pm: PV in 51.3 V · battery 27.4 V · 40.0 A · 1,096 W · Bulk · 1.4 kWh so far today.","PV in of ~51 V means its panels are wired 2 in series (Canadian Vmp 29.8 V each). Confirm with the installer."],
+ ["12-daly-bms.jpg","Daly Smart BMS R10K (×10, not yet installed)","LiFePO4 8S 24 V, 100 A charge / 100 A discharge. Ports: NTC-A, UART-1, CAN/485, DIO, KEY, UART-2, NTC-B. B− and P− bolt bars at the end.","Temperature sensor must go in NTC-A or the board won't charge or discharge."],
+ ["13-canadian-label.jpg","Canadian Solar CS6P-235PX label (×8)","235 W · Vmp 29.8 V · Imp 7.90 A · Voc 36.9 V · Isc 8.46 A · max system 600 V · max series fuse 15 A.",""],
+ ["14-ja-label.jpg","JA Solar JAP72S10-345/SC label (×8)","345 W · Voc 46.07 V · Vmp 38.25 V · Isc 9.50 A · Imp 9.02 A · max system 1500 V. Photo from April 2021.","Never more than 4 in series on the Victron (cold-morning voltage)."]
+];
+var grid=document.getElementById('grid');
+P.forEach(function(p,i){
+  var li=document.createElement('li'); li.className='card';
+  li.innerHTML='<button type="button" aria-label="Enlarge: '+p[1]+'"><img loading="lazy" src="photos/'+p[0]+'" alt="'+p[1]+'"></button>'+
+    '<div class="cap"><span class="num">'+String(i+1).padStart(2,'0')+'</span><b>'+p[1]+'</b><span>'+p[2]+'</span>'+(p[3]?'<span class="flag">⚠ '+p[3]+'</span>':'')+'</div>';
+  li.querySelector('button').addEventListener('click',function(){show(i)});
+  grid.appendChild(li);
+});
+var dlg=document.getElementById('dlg'),cur=0;
+function show(i){cur=(i+P.length)%P.length;var p=P[cur];
+  document.getElementById('big').src='photos/'+p[0];document.getElementById('big').alt=p[1];
+  document.getElementById('bigcap').innerHTML='<span class="num">'+String(cur+1).padStart(2,'0')+' / '+P.length+'</span><b>'+p[1]+'</b><span>'+p[2]+'</span>'+(p[3]?'<span class="flag">⚠ '+p[3]+'</span>':'');
+  if(!dlg.open)dlg.showModal();}
+document.getElementById('prev').onclick=function(){show(cur-1)};
+document.getElementById('next').onclick=function(){show(cur+1)};
+document.getElementById('close').onclick=function(){dlg.close()};
+dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
+document.addEventListener('keydown',function(e){if(!dlg.open)return;if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+var sx=null;dlg.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+dlg.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));sx=null});
+</script>
+</body>
+</html>

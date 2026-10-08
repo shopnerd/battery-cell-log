@@ -11,17 +11,17 @@
 /* Layout: a field work order — status strip, then phases in the order the work happens, one column, checkable steps */
 :root{
   --bg:#eef0f2; --sheet:#ffffff; --ink:#1b2127; --muted:#5b6670; --rule:#d5dadf;
-  --accent:#e2591b; --ok:#2f7d4f; --bad:#b3261e; --warn:#a86a00; --tint:#fbe9df;
+  --accent:#e2591b; --ok:#2f7d4f; --bad:#b3261e; --warn:#a86a00; --tint:#fbe9df; --data:#2f64b8;
   --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
   --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
   --mono:"JetBrains Mono",Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#14181c; --sheet:#1c2228; --ink:#e7ebee; --muted:#9aa6b0; --rule:#323b44;
-  --accent:#ff7a3d; --ok:#5cc187; --bad:#ff7b72; --warn:#e3a53a; --tint:#3a2418; color-scheme:dark}}
+  --accent:#ff7a3d; --ok:#5cc187; --bad:#ff7b72; --warn:#e3a53a; --tint:#3a2418; --data:#7aa7ff; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14181c; --sheet:#1c2228; --ink:#e7ebee; --muted:#9aa6b0; --rule:#323b44;
-  --accent:#ff7a3d; --ok:#5cc187; --bad:#ff7b72; --warn:#e3a53a; --tint:#3a2418; color-scheme:dark}
+  --accent:#ff7a3d; --ok:#5cc187; --bad:#ff7b72; --warn:#e3a53a; --tint:#3a2418; --data:#7aa7ff; color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--body)}
 .wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 60px;display:grid;gap:22px}
 h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
@@ -60,6 +60,21 @@ td.v{font-family:var(--mono);font-size:.88rem;white-space:nowrap;font-variant-nu
 .vids a{color:var(--accent);font-weight:600}
 code,.m{font-family:var(--mono);font-size:.88em}
 .wire{font-family:var(--mono);font-size:.85rem;background:var(--bg);border-radius:6px;padding:12px;overflow-x:auto;white-space:pre;line-height:1.5}
+.dia{display:block;width:100%;min-width:720px;height:auto}
+.dia .box{fill:var(--sheet);stroke:var(--muted);stroke-width:1.2}
+.dia .miss{fill:var(--tint);stroke:var(--bad);stroke-width:1.4;stroke-dasharray:5 4}
+.dia .t{fill:var(--ink);font-family:var(--body)}
+.dia .b{font-size:13px;font-weight:600}
+.dia .s{font-size:11px;fill:var(--muted)}
+.dia .m{fill:var(--bad);font-weight:600}
+.dia .q{fill:var(--warn)}
+.dia path{fill:none;stroke-width:2.2}
+.dia .pv{stroke:var(--accent)} .dia .fpv{fill:var(--accent)}
+.dia .pos{stroke:var(--bad)} .dia .neg{stroke:var(--ink)}
+.dia .thin{stroke-width:3.2}
+.dia .ac{stroke:var(--ok)} .dia .dash{stroke-dasharray:6 5}
+.dia .data{stroke:var(--data);stroke-dasharray:3 4}
+.dia .splice{fill:var(--warn);stroke:var(--sheet);stroke-width:1}
 html.l-es .en, html.l-en .es{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -97,6 +112,161 @@ html.l-es .en, html.l-en .es{display:none!important}
     </ul>
   </section>
 
+  <section id="now">
+    <h2><span class="ph">◫</span><span class="en">How it's wired right now (Oct 8)</span><span class="es">Cómo está conectado ahora (8 oct)</span></h2>
+    <p class="note"><span class="en">Drawn from the site photos. Dashed red boxes are parts that should be there and aren't. Items marked "?" need confirming.</span><span class="es">Dibujado de las fotos del sitio. Las cajas rojas punteadas son piezas que faltan. Lo marcado "?" hay que confirmar.</span></p>
+    <div class="tablewrap">
+    <svg class="dia" viewBox="0 0 820 640" role="img" aria-label="Current wiring diagram of the Encino Solo solar system">
+      <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="fpv"/></marker></defs>
+      <!-- arrays -->
+      <rect x="20" y="16" width="210" height="58" rx="6" class="box"/>
+      <text x="125" y="38" class="t b" text-anchor="middle">Array A · 8 × JA Solar 345 W</text>
+      <text x="125" y="56" class="t s" text-anchor="middle">2,760 W · Voc 46.07 V each</text>
+      <rect x="250" y="16" width="210" height="58" rx="6" class="box"/>
+      <text x="355" y="38" class="t b" text-anchor="middle">Array B · 8 × Canadian 235 W</text>
+      <text x="355" y="56" class="t s" text-anchor="middle">1,880 W · Voc 36.9 V each</text>
+      <path d="M125,74 L200,112" class="pv"/><path d="M355,74 L280,112" class="pv"/>
+      <!-- PV box -->
+      <rect x="140" y="112" width="200" height="44" rx="6" class="box"/>
+      <text x="240" y="132" class="t b" text-anchor="middle">PV breaker box (white DIN)</text>
+      <text x="240" y="148" class="t s" text-anchor="middle">AC-rated ABB or new MidNite DC? ?</text>
+      <path d="M200,156 L125,206" class="pv"/><path d="M280,156 L325,206" class="pv"/>
+      <text x="240" y="186" class="t s q" text-anchor="middle">which array → which controller ?</text>
+      <!-- controllers -->
+      <rect x="40" y="206" width="170" height="58" rx="6" class="box"/>
+      <text x="125" y="228" class="t b" text-anchor="middle">Victron MPPT 250/100</text>
+      <text x="125" y="246" class="t s" text-anchor="middle">100 A max · ~2,900 W</text>
+      <rect x="240" y="206" width="170" height="58" rx="6" class="box"/>
+      <text x="325" y="228" class="t b" text-anchor="middle">MidNite Classic 250</text>
+      <text x="325" y="246" class="t s" text-anchor="middle">63 A max · PV in 61.6 V ?</text>
+      <!-- cerbo -->
+      <rect x="470" y="16" width="190" height="78" rx="6" class="box"/>
+      <text x="565" y="38" class="t b" text-anchor="middle">Cerbo GX → VRM</text>
+      <text x="565" y="56" class="t s" text-anchor="middle">Internet: Ethernet ✓ + WiFi</text>
+      <text x="565" y="72" class="t s" text-anchor="middle">Sees MultiPlus ✓</text>
+      <text x="565" y="87" class="t s q" text-anchor="middle">Not: Victron, SmartShunt, Classic</text>
+      <path d="M565,94 L565,206" class="data"/>
+      <text x="572" y="150" class="t s">VE.Bus ✓</text>
+      <!-- multiplus -->
+      <rect x="470" y="206" width="190" height="70" rx="6" class="box"/>
+      <text x="565" y="228" class="t b" text-anchor="middle">MultiPlus 24/3000/70</text>
+      <text x="565" y="246" class="t s" text-anchor="middle">3,000 VA · 120 V AC</text>
+      <text x="565" y="264" class="t s q" text-anchor="middle">temp sensor 44 °C · where?</text>
+      <!-- AC side -->
+      <rect x="690" y="16" width="120" height="58" rx="6" class="box"/>
+      <text x="750" y="38" class="t b" text-anchor="middle">Generator plug</text>
+      <text x="750" y="56" class="t s" text-anchor="middle">AC in · not used</text>
+      <path d="M750,74 L640,206" class="ac dash"/>
+      <rect x="690" y="206" width="120" height="70" rx="6" class="box"/>
+      <text x="750" y="228" class="t b" text-anchor="middle">AC panel</text>
+      <text x="750" y="246" class="t s" text-anchor="middle">2 breakers</text>
+      <text x="750" y="262" class="t s" text-anchor="middle">→ house, outlets</text>
+      <path d="M660,240 L690,240" class="ac"/>
+      <!-- main breaker + shunt -->
+      <rect x="290" y="330" width="160" height="44" rx="6" class="box"/>
+      <text x="370" y="350" class="t b" text-anchor="middle">150 A DC breaker</text>
+      <text x="370" y="366" class="t s" text-anchor="middle">main + (on/off)</text>
+      <rect x="480" y="330" width="160" height="44" rx="6" class="box"/>
+      <text x="560" y="350" class="t b" text-anchor="middle">SmartShunt 500 A</text>
+      <text x="560" y="366" class="t s" text-anchor="middle">main − (not to Cerbo)</text>
+      <!-- DC device leads -->
+      <path d="M90,264 L320,330" class="pos"/>
+      <path d="M300,264 L345,330" class="pos"/>
+      <path d="M500,276 L420,330" class="pos"/>
+      <path d="M160,264 L510,330" class="neg"/>
+      <path d="M370,264 L535,330" class="neg"/>
+      <path d="M600,276 L600,330" class="neg"/>
+      <rect x="20" y="288" width="150" height="34" rx="5" class="miss"/>
+      <text x="95" y="302" class="t s m" text-anchor="middle">No breaker on either</text>
+      <text x="95" y="315" class="t s m" text-anchor="middle">controller lead</text>
+      <rect x="660" y="330" width="150" height="44" rx="5" class="miss"/>
+      <text x="735" y="350" class="t s m" text-anchor="middle">Class T 300 A fuse</text>
+      <text x="735" y="364" class="t s m" text-anchor="middle">missing</text>
+      <!-- trunks -->
+      <path d="M370,374 L370,420" class="pos"/><path d="M560,374 L560,440" class="neg"/>
+      <path d="M40,420 L790,420" class="pos thin"/><path d="M40,440 L790,440" class="neg thin"/>
+      <text x="44" y="413" class="t s">+ trunk · 4 AWG · taped splices</text>
+      <text x="44" y="456" class="t s">− trunk · 4 AWG · taped splices</text>
+      <!-- packs -->
+      <g id="packs">
+<path d="M56,470 L56,420" class="pos"/><path d="M90,470 L90,440" class="neg"/>
+<circle cx="56" cy="420" r="4" class="splice"/><circle cx="90" cy="440" r="4" class="splice"/>
+<rect x="40" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="73" y="492" class="t b" text-anchor="middle">#1</text>
+<text x="73" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="73" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M132,470 L132,420" class="pos"/><path d="M166,470 L166,440" class="neg"/>
+<circle cx="132" cy="420" r="4" class="splice"/><circle cx="166" cy="440" r="4" class="splice"/>
+<rect x="116" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="149" y="492" class="t b" text-anchor="middle">#2</text>
+<text x="149" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="149" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M208,470 L208,420" class="pos"/><path d="M242,470 L242,440" class="neg"/>
+<circle cx="208" cy="420" r="4" class="splice"/><circle cx="242" cy="440" r="4" class="splice"/>
+<rect x="192" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="225" y="492" class="t b" text-anchor="middle">#3</text>
+<text x="225" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="225" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M284,470 L284,420" class="pos"/><path d="M318,470 L318,440" class="neg"/>
+<circle cx="284" cy="420" r="4" class="splice"/><circle cx="318" cy="440" r="4" class="splice"/>
+<rect x="268" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="301" y="492" class="t b" text-anchor="middle">#4</text>
+<text x="301" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="301" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M360,470 L360,420" class="pos"/><path d="M394,470 L394,440" class="neg"/>
+<circle cx="360" cy="420" r="4" class="splice"/><circle cx="394" cy="440" r="4" class="splice"/>
+<rect x="344" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="377" y="492" class="t b" text-anchor="middle">#5</text>
+<text x="377" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="377" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M436,470 L436,420" class="pos"/><path d="M470,470 L470,440" class="neg"/>
+<circle cx="436" cy="420" r="4" class="splice"/><circle cx="470" cy="440" r="4" class="splice"/>
+<rect x="420" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="453" y="492" class="t b" text-anchor="middle">#6</text>
+<text x="453" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="453" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M512,470 L512,420" class="pos"/><path d="M546,470 L546,440" class="neg"/>
+<circle cx="512" cy="420" r="4" class="splice"/><circle cx="546" cy="440" r="4" class="splice"/>
+<rect x="496" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="529" y="492" class="t b" text-anchor="middle">#7</text>
+<text x="529" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="529" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M588,470 L588,420" class="pos"/><path d="M622,470 L622,440" class="neg"/>
+<circle cx="588" cy="420" r="4" class="splice"/><circle cx="622" cy="440" r="4" class="splice"/>
+<rect x="572" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="605" y="492" class="t b" text-anchor="middle">#8</text>
+<text x="605" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="605" y="526" class="t s" text-anchor="middle">100 Ah · 26.1</text>
+<path d="M664,470 L664,420" class="pos"/><path d="M698,470 L698,440" class="neg"/>
+<circle cx="664" cy="420" r="4" class="splice"/><circle cx="698" cy="440" r="4" class="splice"/>
+<rect x="648" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="681" y="492" class="t b" text-anchor="middle">#9</text>
+<text x="681" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="681" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+<path d="M740,470 L740,420" class="pos"/><path d="M774,470 L774,440" class="neg"/>
+<circle cx="740" cy="420" r="4" class="splice"/><circle cx="774" cy="440" r="4" class="splice"/>
+<rect x="724" y="470" width="66" height="70" rx="5" class="box"/>
+<text x="757" y="492" class="t b" text-anchor="middle">#10</text>
+<text x="757" y="510" class="t s" text-anchor="middle">25.6 V</text>
+<text x="757" y="526" class="t s" text-anchor="middle">100 Ah · 26.2</text>
+</g>
+      <rect x="40" y="560" width="250" height="34" rx="5" class="miss"/>
+      <text x="165" y="582" class="t s m" text-anchor="middle">Daly BMS: 0 of 10 installed</text>
+      <rect x="310" y="560" width="230" height="34" rx="5" class="miss"/>
+      <text x="425" y="582" class="t s m" text-anchor="middle">Bus bars: none (splices instead)</text>
+      <rect x="560" y="560" width="230" height="34" rx="5" class="miss"/>
+      <text x="675" y="582" class="t s m" text-anchor="middle">Packs not strapped to rack</text>
+      <!-- legend -->
+      <path d="M40,620 L70,620" class="pv"/><text x="76" y="624" class="t s">PV DC</text>
+      <path d="M140,620 L170,620" class="pos"/><text x="176" y="624" class="t s">battery +</text>
+      <path d="M260,620 L290,620" class="neg"/><text x="296" y="624" class="t s">battery −</text>
+      <path d="M380,620 L410,620" class="ac"/><text x="416" y="624" class="t s">AC 120 V</text>
+      <path d="M500,620 L530,620" class="data"/><text x="536" y="624" class="t s">data</text>
+      <rect x="600" y="611" width="28" height="16" rx="3" class="miss"/><text x="636" y="624" class="t s">missing</text>
+    </svg>
+    </div>
+  </section>
+
   <section id="specs">
     <h2><span class="ph">≡</span><span class="en">System specs</span><span class="es">Especificaciones del sistema</span></h2>
     <p class="note"><span class="en">Source column: <b>label</b> = read off the part, <b>sheet</b> = maker's datasheet/manual, <b>seen</b> = from site photos, <b>confirm</b> = needs checking on site.</span><span class="es">Columna fuente: <b>label</b> = leído en la pieza, <b>sheet</b> = ficha/manual del fabricante, <b>seen</b> = fotos del sitio, <b>confirm</b> = verificar en sitio.</span></p>
@@ -128,6 +298,10 @@ html.l-es .en, html.l-en .es{display:none!important}
       <tr><td>MidNite Classic 250</td><td><span class="en">PV 250 V (HyperVOC to 274 V on 24 V) · ~63 A output · ~1,750 W usable on 24 V</span><span class="es">PV 250 V (HyperVOC hasta 274 V en 24 V) · ~63 A salida · ~1,750 W útiles en 24 V</span></td><td>sheet</td></tr>
       <tr><td>Victron MultiPlus 24/3000/70</td><td>3,000 VA inverter · 120 V · 70 A charger · 50 A AC transfer · <span class="en">maker calls for a 300 A DC fuse</span><span class="es">el fabricante pide fusible DC de 300 A</span></td><td>label · sheet</td></tr>
       <tr><td>Victron Cerbo GX</td><td>VE.Can 1 & 2, VE.Bus, 3 × VE.Direct, Ethernet, WiFi (TP-Link USB) · VRM "Encino Solo"</td><td>label</td></tr>
+      <tr><td>TP-Link USB WiFi adapter</td><td><span class="en">In Cerbo USB. Cerbo also on wired Ethernet since Oct 8</span><span class="es">En USB del Cerbo. Cerbo también por Ethernet desde el 8 oct</span></td><td>seen</td></tr>
+      <tr><td><span class="en">AC panel</span><span class="es">Centro de carga AC</span></td><td><span class="en">Small load center beside the MultiPlus, 2 breakers, plus duplex outlets and a power strip on the wall</span><span class="es">Centro de carga pequeño junto al MultiPlus, 2 breakers, más contactos dobles y una regleta en la pared</span></td><td>seen</td></tr>
+      <tr><td><span class="en">AC input</span><span class="es">Entrada AC</span></td><td><span class="en">Yellow cords with twist-lock plug into the MultiPlus (generator input). Not in use</span><span class="es">Cables amarillos con clavija de seguridad al MultiPlus (entrada de generador). Sin uso</span></td><td>confirm</td></tr>
+      <tr><td><span class="en">Prep charger</span><span class="es">Cargador de preparación</span></td><td>NOCO Genius Pro 25 (24 V lithium mode)</td><td>notes</td></tr>
       <tr><td>Victron SmartShunt 500 A</td><td><span class="en">On main negative. Set for 1,000 Ah, charged 27.6 V, Peukert 1.05, 99%. Not yet connected to the Cerbo (needs VE.Direct cable)</span><span class="es">En el negativo principal. Ajustar a 1,000 Ah, cargado 27.6 V, Peukert 1.05, 99%. Aún no conectado al Cerbo (falta cable VE.Direct)</span></td><td>seen</td></tr>
     </table></div>
 
@@ -140,6 +314,10 @@ html.l-es .en, html.l-en .es{display:none!important}
       <tr><td><span class="en">MultiPlus cable</span><span class="es">Cable MultiPlus</span></td><td class="v">confirm</td><td class="v">2/0 AWG</td></tr>
       <tr><td><span class="en">Victron battery leads</span><span class="es">Cables batería Victron</span></td><td><span class="en">thin, no own breaker</span><span class="es">delgados, sin breaker propio</span></td><td>2 AWG (35 mm²) + 125 A DC breaker</td></tr>
       <tr><td><span class="en">Classic battery leads</span><span class="es">Cables batería Classic</span></td><td><span class="en">no own breaker</span><span class="es">sin breaker propio</span></td><td>4 AWG + 80 A DC breaker</td></tr>
+      <tr><td><span class="en">Cerbo power</span><span class="es">Alimentación Cerbo</span></td><td><span class="en">Small red/black leads with inline fuses near the shunt</span><span class="es">Cables delgados rojo/negro con fusibles en línea junto al shunt</span></td><td>—</td></tr>
+      <tr><td><span class="en">PV run</span><span class="es">Línea solar</span></td><td><span class="en">Gray PVC conduit from roof into the white DIN box; 6 AWG PV conductors (per Sept notes)</span><span class="es">Tubo PVC gris del techo a la caja DIN blanca; conductores 6 AWG (notas de sept)</span></td><td><span class="en">DC-rated PV breakers + surge protector</span><span class="es">Breakers DC + supresor de picos</span></td></tr>
+      <tr><td><span class="en">Grounding</span><span class="es">Tierra</span></td><td><span class="en">Green ground wires; one loose end by the PV box</span><span class="es">Cables verdes de tierra; una punta suelta junto a la caja solar</span></td><td><span class="en">Land the loose ground</span><span class="es">Conectar la tierra suelta</span></td></tr>
+      <tr><td><span class="en">Pack restraint</span><span class="es">Sujeción de baterías</span></td><td><span class="en">none</span><span class="es">ninguna</span></td><td><span class="en">Bolt or strap each row (seismic)</span><span class="es">Atornillar o amarrar cada fila (sismos)</span></td></tr>
       <tr><td><span class="en">Data cables</span><span class="es">Cables de datos</span></td><td><span class="en">MultiPlus → Cerbo VE.Bus ✓ (fixed Oct 8)</span><span class="es">MultiPlus → Cerbo VE.Bus ✓ (corregido 8 oct)</span></td><td><span class="en">Victron MPPT → VE.Can with terminators; SmartShunt → VE.Direct</span><span class="es">Victron MPPT → VE.Can con terminadores; SmartShunt → VE.Direct</span></td></tr>
     </table></div>
   </section>

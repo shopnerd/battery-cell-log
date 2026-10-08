@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Encino Solo Battery Job</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a field work order — status strip, then phases in the order the work happens, one column, checkable steps */
+:root{
+  --bg:#eef0f2; --sheet:#ffffff; --ink:#1b2127; --muted:#5b6670; --rule:#d5dadf;
+  --accent:#e2591b; --ok:#2f7d4f; --bad:#b3261e; --warn:#a86a00; --tint:#fbe9df;
+  --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14181c; --sheet:#1c2228; --ink:#e7ebee; --muted:#9aa6b0; --rule:#323b44;
+  --accent:#ff7a3d; --ok:#5cc187; --bad:#ff7b72; --warn:#e3a53a; --tint:#3a2418; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14181c; --sheet:#1c2228; --ink:#e7ebee; --muted:#9aa6b0; --rule:#323b44;
+  --accent:#ff7a3d; --ok:#5cc187; --bad:#ff7b72; --warn:#e3a53a; --tint:#3a2418; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 60px;display:grid;gap:22px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:2.1rem}
+h2{font-size:1.45rem;display:flex;gap:10px;align-items:baseline}
+h2 .ph{font-family:var(--mono);font-size:.85rem;color:var(--accent);letter-spacing:.04em}
+h3{font-size:1.1rem}
+p{margin:0}
+.eyebrow{font:600 .78rem var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-start}
+.lang{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.lang button{font:600 .9rem var(--body);background:var(--sheet);color:var(--ink);border:0;padding:8px 14px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.lang button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stop{background:var(--tint);border-left:5px solid var(--bad);padding:14px 16px;border-radius:4px;display:grid;gap:4px}
+.stop strong{font-family:var(--display);font-size:1.25rem;color:var(--bad)}
+section{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:18px;display:grid;gap:14px;min-width:0}
+.state{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.state li{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pill{font:700 .75rem var(--mono);text-align:center;border-radius:4px;padding:2px 0;color:var(--sheet)}
+.p-ok{background:var(--ok)} .p-bad{background:var(--bad)} .p-q{background:var(--warn)}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:30px 22px 1fr;gap:8px;padding:10px 0;border-top:1px solid var(--rule);align-items:start}
+ol.steps li:first-child{border-top:0}
+ol.steps li::before{content:counter(s);font:500 .9rem var(--mono);color:var(--accent);padding-top:3px}
+ol.steps input{width:18px;height:18px;margin-top:4px;accent-color:var(--accent)}
+.sub{display:block;color:var(--muted);font-size:.93rem}
+.why{display:grid;gap:8px;margin:0;padding-left:20px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 .78rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.v{font-family:var(--mono);font-size:.88rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.note{font-size:.93rem;color:var(--muted)}
+.vids{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.vids a{color:var(--accent);font-weight:600}
+code,.m{font-family:var(--mono);font-size:.88em}
+.wire{font-family:var(--mono);font-size:.85rem;background:var(--bg);border-radius:6px;padding:12px;overflow-x:auto;white-space:pre;line-height:1.5}
+html.l-es .en, html.l-en .es{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow"><span class="en">Encino Solo · 24 V LiFePO4 bank · Oct 2026</span><span class="es">Encino Solo · banco LiFePO4 24 V · oct 2026</span></div>
+      <h1><span class="en">Battery job: what's left</span><span class="es">Baterías: lo que falta</span></h1>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="b-es" type="button" data-l="es">Español</button>
+      <button id="b-en" type="button" data-l="en">English</button>
+    </div>
+  </header>
+
+  <div class="stop">
+    <strong><span class="en">The system stays OFF until every step below is done.</span><span class="es">El sistema se queda APAGADO hasta terminar todos los pasos.</span></strong>
+    <p><span class="en">Solar breakers off, inverter off, all 10 pack switches off. Do not turn anything back on without the owner present.</span><span class="es">Breakers solares apagados, inversor apagado, switch de las 10 baterías apagado. No encender nada sin el dueño presente.</span></p>
+  </div>
+
+  <section id="state">
+    <h2><span class="ph">0</span><span class="en">Where it stands (photos, Oct 8)</span><span class="es">Cómo está ahora (fotos, 8 de oct)</span></h2>
+    <ul class="state">
+      <li><span class="pill p-ok">✓</span><span><span class="en">Victron 250/100, MidNite Classic, Cerbo GX and MultiPlus mounted right above the batteries. Good location.</span><span class="es">Victron 250/100, MidNite Classic, Cerbo GX y MultiPlus montados justo arriba de las baterías. Buena ubicación.</span></span></li>
+      <li><span class="pill p-ok">✓</span><span><span class="en">150 A DC breaker on the main positive and the SmartShunt on the main negative are in place.</span><span class="es">El breaker DC de 150 A en el positivo principal y el SmartShunt en el negativo principal están instalados.</span></span></li>
+      <li><span class="pill p-ok">✓</span><span><span class="en">10 packs racked, numbered, all at 26.1–26.2 V. Matched closely enough to parallel safely.</span><span class="es">10 baterías en el estante, numeradas, todas en 26.1–26.2 V. Suficientemente iguales para conectar en paralelo.</span></span></li>
+      <li><span class="pill p-bad">✗</span><span><span class="en"><b>No Daly BMS in any pack.</b> Required. See section 1.</span><span class="es"><b>Ninguna batería tiene BMS Daly.</b> Obligatorio. Ver sección 1.</span></span></li>
+      <li><span class="pill p-bad">✗</span><span><span class="en"><b>Packs joined with taped splices</b> onto two 4 AWG wires. Needs bus bars. The MultiPlus can pull ~150 A; 4 AWG is not rated for that, and taped splices loosen and heat up where nobody can see them.</span><span class="es"><b>Baterías unidas con empalmes con cinta</b> sobre dos cables 4 AWG. Se necesitan barras colectoras. El MultiPlus puede jalar ~150 A; el 4 AWG no aguanta eso, y los empalmes con cinta se aflojan y se calientan sin que se vea.</span></span></li>
+      <li><span class="pill p-bad">✗</span><span><span class="en"><b>No Class T fuse.</b> A lithium bank this size can push thousands of amps into a short. The 150 A breaker is fine as a switch but a Class T fuse is the part made to stop that.</span><span class="es"><b>Falta fusible Clase T.</b> Un banco de litio de este tamaño puede dar miles de amperes en un corto. El breaker de 150 A sirve como interruptor, pero el fusible Clase T es la pieza hecha para detener eso.</span></span></li>
+      <li><span class="pill p-bad">✗</span><span><span class="en"><b>Charge controllers have no breaker of their own</b> on the battery side, and the Victron's battery wires look thin for 100 A.</span><span class="es"><b>Los controladores no tienen breaker propio</b> del lado de batería, y los cables de batería del Victron se ven delgados para 100 A.</span></span></li>
+      <li><span class="pill p-q">?</span><span><span class="en">Pack negatives are red wire and both trunk wires are black. Packs are not strapped to the rack. Small wires at the breaker and shunt are loose.</span><span class="es">Los negativos de las baterías son cable rojo y los dos troncales son negros. Las baterías no están sujetas al estante. Los cables delgados en el breaker y el shunt están sueltos.</span></span></li>
+    </ul>
+  </section>
+
+  <section id="why">
+    <h2><span class="ph">1</span><span class="en">Why the BMS is mandatory</span><span class="es">Por qué el BMS es obligatorio</span></h2>
+    <p><span class="en">Each pack is 8 cells in series. The charge controllers and inverter only see the whole bank's voltage, never a single cell. Without a BMS, one cell can run past 3.65 V while the bank reads a normal 28.4 V. That cell swells, fails, or catches fire.</span><span class="es">Cada batería tiene 8 celdas en serie. Los controladores y el inversor solo ven el voltaje total del banco, nunca una celda sola. Sin BMS, una celda puede pasar de 3.65 V mientras el banco marca 28.4 V normal. Esa celda se infla, se daña o se incendia.</span></p>
+    <ul class="why">
+      <li><span class="en"><b>Overcharge:</b> cuts charging at 3.65 V per cell.</span><span class="es"><b>Sobrecarga:</b> corta la carga a 3.65 V por celda.</span></li>
+      <li><span class="en"><b>Over-discharge:</b> disconnects before a cell drops below 2.5 V and is ruined.</span><span class="es"><b>Descarga profunda:</b> desconecta antes de que una celda baje de 2.5 V y se arruine.</span></li>
+      <li><span class="en"><b>Short circuit / over-current:</b> with 10 packs in parallel, a fault in one is fed by the other nine. The BMS cuts that pack off.</span><span class="es"><b>Corto / sobrecorriente:</b> con 10 baterías en paralelo, una falla en una la alimentan las otras nueve. El BMS desconecta esa batería.</span></li>
+      <li><span class="en"><b>Cold:</b> lithium must never charge below freezing. The BMS blocks charging under 2 °C.</span><span class="es"><b>Frío:</b> el litio nunca debe cargarse bajo cero. El BMS bloquea la carga bajo 2 °C.</span></li>
+      <li><span class="en"><b>Balancing:</b> keeps the 8 cells even near full charge.</span><span class="es"><b>Balanceo:</b> mantiene las 8 celdas parejas cerca de carga completa.</span></li>
+    </ul>
+    <p class="note"><span class="en">The chargers handle normal start and stop. The BMS is the emergency brake. If a BMS ever trips in normal use, a charger setting is wrong.</span><span class="es">Los cargadores manejan el arranque y paro normal. El BMS es el freno de emergencia. Si un BMS se dispara en uso normal, hay un ajuste mal en un cargador.</span></p>
+  </section>
+
+  <section id="pack">
+    <h2><span class="ph">2</span><span class="en">Each pack: Daly BMS + full charge</span><span class="es">Cada batería: BMS Daly + carga completa</span></h2>
+    <p class="note"><span class="en">On the bench, one pack at a time. Same steps 10 times. Parts on hand: 10 × Daly Smart BMS 8S 24 V 100 A, NOCO Genius Pro 25.</span><span class="es">En la mesa, una batería a la vez. Los mismos pasos 10 veces. Material disponible: 10 × BMS Daly Smart 8S 24 V 100 A, cargador NOCO Genius Pro 25.</span></p>
+    <ol class="steps">
+      <li><input type="checkbox" id="s1"><label for="s1"><span class="en">All pack switches OFF. Meter the two trunk wires: <b>0 V</b>. If not 0 V, stop.</span><span class="es">Switch de todas las baterías en OFF. Medir los dos cables troncales: <b>0 V</b>. Si no da 0 V, parar.</span></label></li>
+      <li><input type="checkbox" id="s2"><label for="s2"><span class="en">Unplug the pack's orange (+) and black (−) connectors. Take it to the bench. No rings or watches; insulated tools.</span><span class="es">Desconectar el conector naranja (+) y negro (−). Llevar a la mesa. Sin anillos ni reloj; herramienta aislada.</span></label></li>
+      <li><input type="checkbox" id="s3"><label for="s3"><span class="en">Open the pack and <b>photograph everything before touching a wire</b>. Send the photo of pack #1 to the owner first.</span><span class="es">Abrir y <b>tomar fotos de todo antes de tocar un cable</b>. Mandar la foto de la batería #1 al dueño primero.</span><span class="sub"><span class="en">Number the cells 1–8. Cell 1 = the one on the pack's main negative. Cell 8's positive = main positive.</span><span class="es">Numerar las celdas 1–8. Celda 1 = la del negativo principal. El positivo de la celda 8 = positivo principal.</span></span></label></li>
+      <li><input type="checkbox" id="s4"><label for="s4"><span class="en">Remove the original BMS completely: thick wires and thin sense wires. Tape every loose end.</span><span class="es">Quitar el BMS original completo: cables gruesos y cables delgados. Encintar cada punta suelta.</span><span class="sub"><span class="en">Two BMS units on the same cells fight each other.</span><span class="es">Dos BMS en las mismas celdas se pelean entre sí.</span></span></label></li>
+      <li><input type="checkbox" id="s5"><label for="s5"><span class="en">Daly thick <b>B−</b> wire → cell 1 negative.</span><span class="es">Cable grueso <b>B−</b> del Daly → negativo de la celda 1.</span></label></li>
+      <li><input type="checkbox" id="s6"><label for="s6"><span class="en">Thin sense wires, <b>plug NOT in the BMS</b>: black → cell 1 negative, red 1 → cell 1 positive, red 2 → cell 2 positive … red 8 → cell 8 positive.</span><span class="es">Cables delgados, <b>conector SIN conectar al BMS</b>: negro → negativo celda 1, rojo 1 → positivo celda 1, rojo 2 → positivo celda 2 … rojo 8 → positivo celda 8.</span></label></li>
+      <li><input type="checkbox" id="s7"><label for="s7"><span class="en"><b>Check the plug before inserting it.</b> Meter each pair of neighboring pins: every pair <b>2.0–3.6 V</b>.</span><span class="es"><b>Revisar el conector antes de conectarlo.</b> Medir cada par de pines vecinos: todos <b>2.0–3.6 V</b>.</span><span class="sub"><span class="en">0 V, ~6 V, or negative = a wire on the wrong cell. Fix it, or the BMS burns out.</span><span class="es">0 V, ~6 V o negativo = un cable en la celda equivocada. Corregir, o se quema el BMS.</span></span></label></li>
+      <li><input type="checkbox" id="s8"><label for="s8"><span class="en">Plug in the sense connector and the temperature sensor. Tape the sensor to the middle of the cells.</span><span class="es">Conectar el conector de sensado y el sensor de temperatura. Pegar el sensor al centro de las celdas.</span></label></li>
+      <li><input type="checkbox" id="s9"><label for="s9"><span class="en">Daly thick <b>P−</b> wire → the inside of the pack's front − connector. The positive stays as it was.</span><span class="es">Cable grueso <b>P−</b> del Daly → por dentro al conector − del frente. El positivo se queda como estaba.</span></label></li>
+      <li><input type="checkbox" id="s10"><label for="s10"><span class="en">Test: meter + to B−, then + to P−. Both read the same = BMS is passing power.</span><span class="es">Prueba: medir + a B−, luego + a P−. Si marcan igual, el BMS está pasando corriente.</span></label></li>
+      <li><input type="checkbox" id="s11"><label for="s11"><span class="en">Program it in the <b>Daly Smart BMS</b> app (Bluetooth) with the table below. If it won't wake, touch the charger on briefly.</span><span class="es">Programar en la app <b>Daly Smart BMS</b> (Bluetooth) con la tabla de abajo. Si no despierta, conectar el cargador un momento.</span></label></li>
+      <li><input type="checkbox" id="s12"><label for="s12"><span class="en"><b>Charge full</b> with the NOCO in 24 V lithium mode until complete. Rest 2 hours. Write the voltage on the pack's tape.</span><span class="es"><b>Cargar completa</b> con el NOCO en modo litio 24 V hasta que termine. Reposar 2 horas. Anotar el voltaje en la cinta de la batería.</span><span class="sub"><span class="en">In the app, all 8 cells within about 0.05 V of each other.</span><span class="es">En la app, las 8 celdas dentro de 0.05 V entre sí.</span></span></label></li>
+      <li><input type="checkbox" id="s13"><label for="s13"><span class="en">Close the pack, mark it "Daly ✓" with the date. Next pack.</span><span class="es">Cerrar la batería, marcar "Daly ✓" con la fecha. Siguiente batería.</span></label></li>
+    </ol>
+    <h3><span class="en">Daly settings (every pack)</span><span class="es">Ajustes Daly (cada batería)</span></h3>
+    <div class="tablewrap"><table>
+      <tr><th><span class="en">Setting</span><span class="es">Ajuste</span></th><th><span class="en">Value</span><span class="es">Valor</span></th></tr>
+      <tr><td><span class="en">Type · cells · capacity</span><span class="es">Tipo · celdas · capacidad</span></td><td class="v">LiFePO4 · 8 · 100 Ah</td></tr>
+      <tr><td><span class="en">Cell high cutoff / release</span><span class="es">Celda alta corte / regreso</span></td><td class="v">3.65 V / 3.40 V</td></tr>
+      <tr><td><span class="en">Cell low cutoff / release</span><span class="es">Celda baja corte / regreso</span></td><td class="v">2.50 V / 2.90 V</td></tr>
+      <tr><td><span class="en">Pack high / low</span><span class="es">Batería alta / baja</span></td><td class="v">29.2 V / 20.0 V</td></tr>
+      <tr><td><span class="en">Balancing starts</span><span class="es">Inicio de balanceo</span></td><td class="v">3.40 V · Δ 0.03 V</td></tr>
+      <tr><td><span class="en">Charge / discharge current</span><span class="es">Corriente carga / descarga</span></td><td class="v">100 A / 100 A</td></tr>
+      <tr><td><span class="en">No charging below</span><span class="es">No cargar bajo</span></td><td class="v">2 °C</td></tr>
+    </table></div>
+  </section>
+
+  <section id="dc">
+    <h2><span class="ph">3</span><span class="en">Rebuild the battery wiring</span><span class="es">Rehacer el cableado de baterías</span></h2>
+    <div class="wire">10 packs (+) ─ equal leads ─▶ [+ BUS] ─▶ Class T 300 A ─▶ 150 A breaker ─▶ MultiPlus
+                                     ├─▶ breaker 125 A ─▶ Victron 250/100
+                                     └─▶ breaker 80 A  ─▶ Classic 250
+10 packs (−) ─ equal leads ─▶ [− BUS] ─▶ SmartShunt BATTERY MINUS
+                       SmartShunt LOAD MINUS ─▶ MultiPlus −, Victron −, Classic −</div>
+    <ol class="steps">
+      <li><input type="checkbox" id="d1"><label for="d1"><span class="en">Two <b>bus bars</b> (+ and −), 300 A or more, covered, on the wall right above the rack. Remove all taped splices.</span><span class="es">Dos <b>barras colectoras</b> (+ y −), 300 A o más, con tapa, en la pared justo arriba del estante. Quitar todos los empalmes con cinta.</span></label></li>
+      <li><input type="checkbox" id="d2"><label for="d2"><span class="en">Each pack gets its own + lead and − lead to the bus bars. <b>All 10 leads the same length</b>, even with slack. Max 2 lugs per stud.</span><span class="es">Cada batería lleva su propio cable + y − a las barras. <b>Los 10 cables del mismo largo</b>, aunque sobre. Máximo 2 terminales por tornillo.</span><span class="sub"><span class="en">Equal leads = each pack does equal work.</span><span class="es">Cables iguales = cada batería trabaja igual.</span></span></label></li>
+      <li><input type="checkbox" id="d3"><label for="d3"><span class="en"><b>Class T fuse</b>, 300 A, on the + bus output, before the 150 A breaker. 2/0 cable to the MultiPlus.</span><span class="es"><b>Fusible Clase T</b>, 300 A, a la salida de la barra +, antes del breaker de 150 A. Cable 2/0 al MultiPlus.</span></label></li>
+      <li><input type="checkbox" id="d4"><label for="d4"><span class="en">Own DC breaker for each controller at the + bus: <b>Victron 125 A on 2 AWG (35 mm²)</b>, <b>Classic 80 A on 4 AWG</b>.</span><span class="es">Breaker DC propio para cada controlador en la barra +: <b>Victron 125 A con cable 2 AWG (35 mm²)</b>, <b>Classic 80 A con 4 AWG</b>.</span></label></li>
+      <li><input type="checkbox" id="d5"><label for="d5"><span class="en">Every negative passes through the SmartShunt's LOAD MINUS side, or the battery meter reads wrong.</span><span class="es">Todos los negativos pasan por el lado LOAD MINUS del SmartShunt, o el medidor de batería marca mal.</span></label></li>
+      <li><input type="checkbox" id="d6"><label for="d6"><span class="en">Black tape on both ends of every negative wire. Strap the packs to the rack (earthquakes). Tie up the loose small wires.</span><span class="es">Cinta negra en los dos extremos de cada negativo. Sujetar las baterías al estante (sismos). Amarrar los cables delgados sueltos.</span></label></li>
+      <li><input type="checkbox" id="d7"><label for="d7"><span class="en">Before the first pack goes on the bus: all 10 resting voltages <b>within 0.05 V</b> of each other.</span><span class="es">Antes de conectar la primera batería: los 10 voltajes en reposo <b>dentro de 0.05 V</b> entre sí.</span></label></li>
+    </ol>
+  </section>
+
+  <section id="power">
+    <h2><span class="ph">4</span><span class="en">Settings, then power-up</span><span class="es">Ajustes, luego encender</span></h2>
+    <div class="tablewrap"><table>
+      <tr><th><span class="en">Device</span><span class="es">Equipo</span></th><th><span class="en">Set to</span><span class="es">Ajustar a</span></th></tr>
+      <tr><td>Victron 250/100 · Classic 250</td><td class="v">24 V · LiFePO4<br>absorb 28.4 V · float 27.2 V<br>equalize OFF · temp comp OFF</td></tr>
+      <tr><td>MultiPlus 24/3000</td><td class="v">absorb 28.4 V · float 27.2 V<br>low cutoff 22.4 V · restart 24.0 V</td></tr>
+      <tr><td>SmartShunt</td><td class="v">1000 Ah · charged 27.6 V<br>Peukert 1.05 · eff. 99%</td></tr>
+    </table></div>
+    <ol class="steps">
+      <li><input type="checkbox" id="w1"><label for="w1"><span class="en">Pack switches ON, then the controllers' battery breakers. Confirm the Classic shows <b>24 V</b>, not 12 V.</span><span class="es">Switch de baterías ON, luego breakers de batería de los controladores. Confirmar que el Classic marque <b>24 V</b>, no 12 V.</span></label></li>
+      <li><input type="checkbox" id="w2"><label for="w2"><span class="en">Enter the settings above. Screenshot every settings screen.</span><span class="es">Poner los ajustes de arriba. Foto de cada pantalla de ajustes.</span></label></li>
+      <li><input type="checkbox" id="w3"><label for="w3"><span class="en">Solar breakers ON last. Shutting down: solar OFF first.</span><span class="es">Breakers solares ON al final. Para apagar: solar OFF primero.</span></label></li>
+      <li><input type="checkbox" id="w4"><label for="w4"><span class="en">First full charge: watch it reach 28.4 V and drop to float. Check a few packs in the Daly app: cells close, none tripped.</span><span class="es">Primera carga completa: ver que llegue a 28.4 V y baje a flotación. Revisar varias baterías en la app Daly: celdas parejas, ninguna disparada.</span></label></li>
+    </ol>
+  </section>
+
+  <section id="videos">
+    <h2><span class="ph">▶</span><span class="en">Videos for this exact setup</span><span class="es">Videos para este equipo</span></h2>
+    <ul class="vids">
+      <li><a href="https://www.youtube.com/watch?v=oTYwy9uIbgc">Daly Smart BMS 100A: where to plug everything in</a> <span class="note">· Offgrid Power Solutions · 15 min · <span class="en">same smart 100 A model</span><span class="es">mismo modelo smart 100 A</span></span></li>
+      <li><a href="https://www.youtube.com/watch?v=vf-qw6g4qX8">Assemble LiFePO4 8S 24V 100A with Daly BMS 100A</a> <span class="note">· Danitech · 18 min · <span class="en">same pack size and BMS</span><span class="es">mismo tamaño de batería y BMS</span></span></li>
+      <li><a href="https://www.youtube.com/watch?v=DX32EWPGZTc">What are the CORRECT steps to wire DALY BMS?</a> <span class="note">· DALY · 2½ min · <span class="en">safe wiring order</span><span class="es">orden seguro de conexión</span></span></li>
+      <li><a href="https://www.youtube.com/watch?v=LwFZw7JK1nk">How to connect BMS to a 24 volt battery</a> <span class="note">· Think Free Live Free · 15 min · <span class="en">24 V, 8 cells</span><span class="es">24 V, 8 celdas</span></span></li>
+    </ul>
+    <p class="note"><span class="en">Videos are in English. The steps on this page are the ones to follow.</span><span class="es">Los videos están en inglés. Los pasos de esta página son los que hay que seguir.</span></p>
+  </section>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function set(l){
+    root.classList.remove('l-es','l-en'); root.classList.add('l-'+l);
+    document.getElementById('b-es').setAttribute('aria-pressed', l==='es');
+    document.getElementById('b-en').setAttribute('aria-pressed', l==='en');
+    root.lang=l;
+    try{localStorage.setItem('lang',l)}catch(e){}
+  }
+  var l='es';
+  if(location.hash==='#en') l='en'; else if(location.hash!=='#es'){try{l=localStorage.getItem('lang')||'es'}catch(e){}}
+  set(l);
+  document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){set(b.dataset.l)})});
+  document.querySelectorAll('input[type=checkbox]').forEach(function(c){
+    try{c.checked=localStorage.getItem('ck-'+c.id)==='1'}catch(e){}
+    c.addEventListener('change',function(){try{localStorage.setItem('ck-'+c.id,c.checked?'1':'0')}catch(e){}});
+  });
+})();
+</script>
+</body>
+</html>

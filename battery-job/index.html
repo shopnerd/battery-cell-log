@@ -97,6 +97,53 @@ html.l-es .en, html.l-en .es{display:none!important}
     </ul>
   </section>
 
+  <section id="specs">
+    <h2><span class="ph">≡</span><span class="en">System specs</span><span class="es">Especificaciones del sistema</span></h2>
+    <p class="note"><span class="en">Source column: <b>label</b> = read off the part, <b>sheet</b> = maker's datasheet/manual, <b>seen</b> = from site photos, <b>confirm</b> = needs checking on site.</span><span class="es">Columna fuente: <b>label</b> = leído en la pieza, <b>sheet</b> = ficha/manual del fabricante, <b>seen</b> = fotos del sitio, <b>confirm</b> = verificar en sitio.</span></p>
+
+    <h3><span class="en">Battery bank (24 V, 25.6 kWh)</span><span class="es">Banco de baterías (24 V, 25.6 kWh)</span></h3>
+    <div class="tablewrap"><table>
+      <tr><th><span class="en">Part</span><span class="es">Pieza</span></th><th><span class="en">Spec</span><span class="es">Dato</span></th><th>src</th></tr>
+      <tr><td><span class="en">Packs</span><span class="es">Baterías</span></td><td>10 × LiFePO4 (CATL cells) 25.6 V · 100 Ah · 2.56 kWh, 8 cells in series, all 10 in parallel = 1,000 Ah</td><td>confirm</td></tr>
+      <tr><td><span class="en">Pack front</span><span class="es">Frente de batería</span></td><td><span class="en">+ / − plug connectors, COM port, SWITCH breaker</span><span class="es">conectores + / −, puerto COM, breaker SWITCH</span></td><td>seen</td></tr>
+      <tr><td><span class="en">Resting voltage before install</span><span class="es">Voltaje en reposo antes de instalar</span></td><td class="v">26.2 V (#8: 26.1 V)</td><td>label</td></tr>
+      <tr><td>BMS (×10)</td><td>Daly Mini-red Smart BMS <b>R10K</b>, LiFePO4 8S 24 V, 100 A charge / 100 A discharge, passive balancing 70–100 mA from 3.4 V, NTC 10 K, Bluetooth via UART, 65 × 125 × 18.8 mm</td><td>label · sheet</td></tr>
+      <tr><td><span class="en">Voltage limits</span><span class="es">Límites de voltaje</span></td><td class="v">full 28.4 · float 27.2 · empty 22.4 · max 29.2 V</td><td>sheet</td></tr>
+    </table></div>
+
+    <h3><span class="en">Solar</span><span class="es">Solar</span></h3>
+    <div class="tablewrap"><table>
+      <tr><th><span class="en">Part</span><span class="es">Pieza</span></th><th><span class="en">Spec</span><span class="es">Dato</span></th><th>src</th></tr>
+      <tr><td><span class="en">Array A (on roof before)</span><span class="es">Arreglo A (ya en el techo)</span></td><td>8 × JA Solar JAP72S10-345/SC: 345 W · Voc 46.07 V · Vmp 38.25 V · Isc 9.50 A · Imp 9.02 A · max system 1500 V · <b>2,760 W</b></td><td>label</td></tr>
+      <tr><td><span class="en">Array B (new)</span><span class="es">Arreglo B (nuevo)</span></td><td>8 × Canadian Solar CS6P-235PX: 235 W · Voc 36.9 V · Vmp 29.8 V · Isc 8.46 A · Imp 7.90 A · max series fuse 15 A · max system 600 V · <b>1,880 W</b></td><td>label</td></tr>
+      <tr><td><span class="en">Stringing</span><span class="es">Series</span></td><td><span class="en">Plan: 2 strings of 4 per array. JA: never more than 4 in series (5 × 46.07 V ≈ 250 V on a cold morning). Classic read 61.6 V input on Oct 8, which suggests its array is wired 2 in series.</span><span class="es">Plan: 2 series de 4 por arreglo. JA: nunca más de 4 en serie (5 × 46.07 V ≈ 250 V en mañana fría). El Classic marcó 61.6 V de entrada el 8 oct, lo que sugiere que su arreglo está en series de 2.</span></td><td>confirm</td></tr>
+      <tr><td><span class="en">Which array on which controller</span><span class="es">Qué arreglo va a qué controlador</span></td><td><span class="en">Recommended: JA (2,760 W) → Victron; Canadian (1,880 W) → Classic</span><span class="es">Recomendado: JA (2,760 W) → Victron; Canadian (1,880 W) → Classic</span></td><td>confirm</td></tr>
+      <tr><td><span class="en">PV breakers</span><span class="es">Breakers solares</span></td><td><span class="en">White DIN box. Old ABB SH201 C50 are AC-rated; replacements bought: 2 × MidNite MNEPV30-300-1PP (30 A, 300 V DC) + MNSPD-300-DC surge protector</span><span class="es">Caja DIN blanca. Los ABB SH201 C50 viejos son para AC; repuestos comprados: 2 × MidNite MNEPV30-300-1PP (30 A, 300 V DC) + supresor MNSPD-300-DC</span></td><td>confirm</td></tr>
+    </table></div>
+
+    <h3><span class="en">Power electronics</span><span class="es">Equipos electrónicos</span></h3>
+    <div class="tablewrap"><table>
+      <tr><th><span class="en">Part</span><span class="es">Pieza</span></th><th><span class="en">Spec</span><span class="es">Dato</span></th><th>src</th></tr>
+      <tr><td>Victron SmartSolar MPPT 250/100-Tr VE.Can</td><td>PV 250 V max (245 V operating) · 100 A charge · ~2,900 W usable on 24 V · max PV short-circuit 70 A · Bluetooth</td><td>label · sheet</td></tr>
+      <tr><td>MidNite Classic 250</td><td><span class="en">PV 250 V (HyperVOC to 274 V on 24 V) · ~63 A output · ~1,750 W usable on 24 V</span><span class="es">PV 250 V (HyperVOC hasta 274 V en 24 V) · ~63 A salida · ~1,750 W útiles en 24 V</span></td><td>sheet</td></tr>
+      <tr><td>Victron MultiPlus 24/3000/70</td><td>3,000 VA inverter · 120 V · 70 A charger · 50 A AC transfer · <span class="en">maker calls for a 300 A DC fuse</span><span class="es">el fabricante pide fusible DC de 300 A</span></td><td>label · sheet</td></tr>
+      <tr><td>Victron Cerbo GX</td><td>VE.Can 1 & 2, VE.Bus, 3 × VE.Direct, Ethernet, WiFi (TP-Link USB) · VRM "Encino Solo"</td><td>label</td></tr>
+      <tr><td>Victron SmartShunt 500 A</td><td><span class="en">On main negative. Set for 1,000 Ah, charged 27.6 V, Peukert 1.05, 99%. Not yet connected to the Cerbo (needs VE.Direct cable)</span><span class="es">En el negativo principal. Ajustar a 1,000 Ah, cargado 27.6 V, Peukert 1.05, 99%. Aún no conectado al Cerbo (falta cable VE.Direct)</span></td><td>seen</td></tr>
+    </table></div>
+
+    <h3><span class="en">DC wiring and protection</span><span class="es">Cableado DC y protecciones</span></h3>
+    <div class="tablewrap"><table>
+      <tr><th><span class="en">Part</span><span class="es">Pieza</span></th><th><span class="en">Now</span><span class="es">Ahora</span></th><th><span class="en">Required</span><span class="es">Requerido</span></th></tr>
+      <tr><td><span class="en">Pack interconnect</span><span class="es">Conexión entre baterías</span></td><td><span class="en">Taped splices onto 2 × 4 AWG (21.2 mm²) THHN trunks</span><span class="es">Empalmes con cinta sobre 2 troncales 4 AWG (21.2 mm²) THHN</span></td><td><span class="en">+ and − bus bars, 300 A+, equal-length leads</span><span class="es">Barras + y −, 300 A+, cables del mismo largo</span></td></tr>
+      <tr><td><span class="en">Main fuse</span><span class="es">Fusible principal</span></td><td><span class="en">none</span><span class="es">ninguno</span></td><td>Class T 300 A</td></tr>
+      <tr><td><span class="en">Main disconnect</span><span class="es">Desconexión principal</span></td><td><span class="en">150 A DC thermal breaker (keep)</span><span class="es">Breaker térmico DC 150 A (se queda)</span></td><td>—</td></tr>
+      <tr><td><span class="en">MultiPlus cable</span><span class="es">Cable MultiPlus</span></td><td class="v">confirm</td><td class="v">2/0 AWG</td></tr>
+      <tr><td><span class="en">Victron battery leads</span><span class="es">Cables batería Victron</span></td><td><span class="en">thin, no own breaker</span><span class="es">delgados, sin breaker propio</span></td><td>2 AWG (35 mm²) + 125 A DC breaker</td></tr>
+      <tr><td><span class="en">Classic battery leads</span><span class="es">Cables batería Classic</span></td><td><span class="en">no own breaker</span><span class="es">sin breaker propio</span></td><td>4 AWG + 80 A DC breaker</td></tr>
+      <tr><td><span class="en">Data cables</span><span class="es">Cables de datos</span></td><td><span class="en">MultiPlus → Cerbo VE.Bus ✓ (fixed Oct 8)</span><span class="es">MultiPlus → Cerbo VE.Bus ✓ (corregido 8 oct)</span></td><td><span class="en">Victron MPPT → VE.Can with terminators; SmartShunt → VE.Direct</span><span class="es">Victron MPPT → VE.Can con terminadores; SmartShunt → VE.Direct</span></td></tr>
+    </table></div>
+  </section>
+
   <section id="why">
     <h2><span class="ph">1</span><span class="en">Why the BMS is mandatory</span><span class="es">Por qué el BMS es obligatorio</span></h2>
     <p><span class="en">Each pack is 8 cells in series. The charge controllers and inverter only see the whole bank's voltage, never a single cell. Without a BMS, one cell can run past 3.65 V while the bank reads a normal 28.4 V. That cell swells, fails, or catches fire.</span><span class="es">Cada batería tiene 8 celdas en serie. Los controladores y el inversor solo ven el voltaje total del banco, nunca una celda sola. Sin BMS, una celda puede pasar de 3.65 V mientras el banco marca 28.4 V normal. Esa celda se infla, se daña o se incendia.</span></p>

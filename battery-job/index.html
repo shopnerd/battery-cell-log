@@ -68,6 +68,7 @@ code,.m{font-family:var(--mono);font-size:.88em}
 .dia .s{font-size:11px;fill:var(--muted)}
 .dia .m{fill:var(--bad);font-weight:600}
 .dia .q{fill:var(--warn)}
+.dia .halo{stroke:var(--sheet);stroke-width:4px;paint-order:stroke;stroke-linejoin:round}
 .dia path{fill:none;stroke-width:2.2}
 .dia .pv{stroke:var(--accent)} .dia .fpv{fill:var(--accent)}
 .dia .pos{stroke:var(--bad)} .dia .neg{stroke:var(--ink)}
@@ -185,8 +186,8 @@ html.l-es .en, html.l-en .es{display:none!important}
       <!-- trunks -->
       <path d="M370,374 L370,420" class="pos"/><path d="M560,374 L560,440" class="neg"/>
       <path d="M40,420 L790,420" class="pos thin"/><path d="M40,440 L790,440" class="neg thin"/>
-      <text x="44" y="413" class="t s">+ trunk · 4 AWG · taped splices</text>
-      <text x="44" y="456" class="t s">− trunk · 4 AWG · taped splices</text>
+      <text x="44" y="413" class="t s halo">+ trunk · 4 AWG · taped splices</text>
+      <text x="44" y="458" class="t s halo">− trunk · 4 AWG · taped splices</text>
       <!-- packs -->
       <g id="packs">
 <path d="M56,470 L56,420" class="pos"/><path d="M90,470 L90,440" class="neg"/>

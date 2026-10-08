@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -38,6 +38,12 @@ h1{font-family:var(--display);font-size:2.1rem;margin:0;line-height:1.1;text-wra
 .cap span{font-size:.9rem;color:var(--muted)}
 .flag{font-size:.85rem;color:var(--warn);font-weight:600}
 .num{font:500 .75rem var(--mono);color:var(--accent)}
+.tr{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.lang{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.lang button{font:600 .9rem var(--body);background:var(--sheet);color:var(--ink);border:0;padding:8px 14px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.lang button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+html.l-es .en, html.l-en .es{display:none!important}
 dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1200px);width:100%}
 dialog::backdrop{background:rgba(10,12,14,.88)}
 .lb{display:grid;gap:10px}
@@ -53,10 +59,11 @@ dialog::backdrop{background:rgba(10,12,14,.88)}
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="eyebrow">Encino Solo · 24 V solar + LiFePO4 · photos Oct 8, 2026</div>
-      <h1>Power system photos</h1>
+      <div class="eyebrow"><span class="en">Encino Solo · 24 V solar + LiFePO4 · photos Oct 8, 2026</span><span class="es">Encino Solo · solar 24 V + LiFePO4 · fotos 8 oct 2026</span></div>
+      <h1><span class="en">Power system photos</span><span class="es">Fotos del sistema de energía</span></h1>
     </div>
-    <a href="https://shopnerd.github.io/battery-cell-log/battery-job/#en">Work order + wiring diagram →</a>
+    <div class="tr"><a id="wo" href="https://shopnerd.github.io/battery-cell-log/battery-job/#es"><span class="en">Work order + wiring diagram →</span><span class="es">Orden de trabajo + diagrama →</span></a>
+    <div class="lang" role="group" aria-label="Language"><button id="b-es" type="button" data-l="es">Español</button><button id="b-en" type="button" data-l="en">English</button></div></div>
   </header>
   <ul class="grid" id="grid"></ul>
 </div>
@@ -65,11 +72,12 @@ dialog::backdrop{background:rgba(10,12,14,.88)}
   <div class="lb">
     <img id="big" alt="">
     <div class="cap" id="bigcap"></div>
-    <div class="nav"><button id="prev" type="button">← Previous</button><button id="close" type="button">Close</button><button id="next" type="button">Next →</button></div>
+    <div class="nav"><button id="prev" type="button">← <span class="en">Previous</span><span class="es">Anterior</span></button><button id="close" type="button"><span class="en">Close</span><span class="es">Cerrar</span></button><button id="next" type="button"><span class="en">Next</span><span class="es">Siguiente</span> →</button></div>
   </div>
 </dialog>
 
 <script>
+var ES=[["Closet de energía, vista completa", "Controladores, Cerbo GX y MultiPlus en la pared; las 10 baterías en el estante de dos niveles abajo.", ""], ["Pared de equipos", "De izquierda a derecha: caja blanca de breakers solares, Victron SmartSolar 250/100, Cerbo GX (arriba), MidNite Classic 250, MultiPlus 24/3000/70, centro de carga AC (abajo a la derecha). El breaker principal y el SmartShunt están en el manojo de cables bajo los controladores.", ""], ["Estante de baterías, 10 unidades", "Arriba #1–5, abajo #6–10. Los cables + y − de cada batería están empalmados con cinta a dos troncales negros 4 AWG a lo largo del estante.", "Faltan barras colectoras en lugar de empalmes con cinta; baterías sin sujetar."], ["Frente de la batería", "Conectores naranja + y negro −, puerto COM, breaker SWITCH. Etiquetas: BAT+ y Control BOX+.", ""], ["Etiqueta de la batería", "Celdas CATL LFP100Ah · módulo LBM025100A · caja eléctrica LBB025100A · 25.6 V · 100 Ah · 2.56 kWh · rango 22.4–28.8 V · carga 0–55 °C · carga continua máx. 0.5C (50 A) · descarga continua máx. 0.7C (70 A) · serie ZNBBBA0014822103230.", ""], ["Breaker principal + SmartShunt", "Breaker DC de 150 A en el positivo principal (palanca naranja, botón azul de reinicio). Victron SmartShunt en el negativo principal. Cables delgados rojo/negro con fusibles en línea alimentan el Cerbo.", "Falta fusible Clase T. SmartShunt sin conectar al Cerbo."], ["Victron MultiPlus 24/3000/70", "Inversor/cargador, 3,000 VA, 120 V AC, cargador 70 A, transferencia 50 A. Los cables amarillos son la entrada AC (generador); los gruesos rojo/negro son los cables DC de batería.", ""], ["Cerbo GX (ya corregido)", "Cable gris ahora en VE.Bus al MultiPlus; cable negro de internet en el puerto Ethernet. Antena WiFi TP-Link en USB. Reporta a VRM “Encino Solo”.", ""], ["Puertos del Cerbo GX", "Fila de arriba: VE.Can 2, VE.Can 1, VE.Bus. Fila de abajo: 3 × USB, HDMI, VE.Direct 1–3, Ethernet.", "Falta conectar el controlador Victron (VE.Can) y el SmartShunt (VE.Direct)."], ["Victron SmartSolar MPPT 250/100-Tr VE.Can", "PV máx. 250 V, carga 100 A, ~2,900 W útiles en 24 V, Bluetooth. Terminales de tornillo: batería a la izquierda, PV a la derecha.", "Cables de batería delgados para 100 A; sin breaker propio."], ["MidNite Classic 250, cargando", "Lectura a la 1:30 pm: entrada PV 51.3 V · batería 27.4 V · 40.0 A · 1,096 W · Bulk · 1.4 kWh en el día.", "Entrada de ~51 V indica paneles en series de 2 (Canadian Vmp 29.8 V c/u). Confirmar con el instalador."], ["BMS Daly Smart R10K (×10, sin instalar)", "LiFePO4 8S 24 V, carga 100 A / descarga 100 A. Puertos: NTC-A, UART-1, CAN/485, DIO, KEY, UART-2, NTC-B. Barras B− y P− atornilladas al extremo.", "El sensor de temperatura debe ir en NTC-A o la tarjeta no carga ni descarga."], ["Etiqueta Canadian Solar CS6P-235PX (×8)", "235 W · Vmp 29.8 V · Imp 7.90 A · Voc 36.9 V · Isc 8.46 A · sistema máx. 600 V · fusible en serie máx. 15 A.", ""], ["Etiqueta JA Solar JAP72S10-345/SC (×8)", "345 W · Voc 46.07 V · Vmp 38.25 V · Isc 9.50 A · Imp 9.02 A · sistema máx. 1500 V. Foto de abril 2021.", "Nunca más de 4 en serie en el Victron (voltaje en mañana fría)."]];
 var P=[
  ["01-closet.jpg","Power closet, full view","Controllers, Cerbo GX and MultiPlus on the wall; 10 battery packs on the two-shelf rack below.",""],
  ["02-wall.jpg","Equipment wall","Left to right: white PV breaker box, Victron SmartSolar 250/100, Cerbo GX (top), MidNite Classic 250, MultiPlus 24/3000/70, AC panel (lower right). Main breaker and SmartShunt sit in the wire bundle below the controllers.",""],
@@ -86,24 +94,32 @@ var P=[
  ["13-canadian-label.jpg","Canadian Solar CS6P-235PX label (×8)","235 W · Vmp 29.8 V · Imp 7.90 A · Voc 36.9 V · Isc 8.46 A · max system 600 V · max series fuse 15 A.",""],
  ["14-ja-label.jpg","JA Solar JAP72S10-345/SC label (×8)","345 W · Voc 46.07 V · Vmp 38.25 V · Isc 9.50 A · Imp 9.02 A · max system 1500 V. Photo from April 2021.","Never more than 4 in series on the Victron (cold-morning voltage)."]
 ];
-var grid=document.getElementById('grid');
-P.forEach(function(p,i){
-  var li=document.createElement('li'); li.className='card';
-  li.innerHTML='<button type="button" aria-label="Enlarge: '+p[1]+'"><img loading="lazy" src="photos/'+p[0]+'" alt="'+p[1]+'"></button>'+
-    '<div class="cap"><span class="num">'+String(i+1).padStart(2,'0')+'</span><b>'+p[1]+'</b><span>'+p[2]+'</span>'+(p[3]?'<span class="flag">⚠ '+p[3]+'</span>':'')+'</div>';
+var grid=document.getElementById('grid'),L='es';
+function txt(i){var p=P[i];return L==='es'?{t:ES[i][0],d:ES[i][1],f:ES[i][2]}:{t:p[1],d:p[2],f:p[3]};}
+function capHTML(i,count){var x=txt(i);return '<span class="num">'+String(i+1).padStart(2,'0')+(count?' / '+P.length:'')+'</span><b>'+x.t+'</b><span>'+x.d+'</span>'+(x.f?'<span class="flag">⚠ '+x.f+'</span>':'');}
+function render(){grid.innerHTML='';P.forEach(function(p,i){
+  var li=document.createElement('li'); li.className='card'; var x=txt(i);
+  li.innerHTML='<button type="button" aria-label="'+x.t+'"><img loading="lazy" src="photos/'+p[0]+'" alt="'+x.t+'"></button><div class="cap">'+capHTML(i)+'</div>';
   li.querySelector('button').addEventListener('click',function(){show(i)});
-  grid.appendChild(li);
-});
+  grid.appendChild(li);});}
+function setLang(l){L=l;var r=document.documentElement;r.classList.remove('l-es','l-en');r.classList.add('l-'+l);r.lang=l;
+  document.getElementById('b-es').setAttribute('aria-pressed',l==='es');document.getElementById('b-en').setAttribute('aria-pressed',l==='en');
+  document.getElementById('wo').href='https://shopnerd.github.io/battery-cell-log/battery-job/#'+l;
+  try{localStorage.setItem('lang',l)}catch(e){}
+  render(); if(dlg.open) show(cur);}
 var dlg=document.getElementById('dlg'),cur=0;
 function show(i){cur=(i+P.length)%P.length;var p=P[cur];
   document.getElementById('big').src='photos/'+p[0];document.getElementById('big').alt=p[1];
-  document.getElementById('bigcap').innerHTML='<span class="num">'+String(cur+1).padStart(2,'0')+' / '+P.length+'</span><b>'+p[1]+'</b><span>'+p[2]+'</span>'+(p[3]?'<span class="flag">⚠ '+p[3]+'</span>':'');
+  document.getElementById('bigcap').innerHTML=capHTML(cur,true);document.getElementById('big').alt=txt(cur).t;
   if(!dlg.open)dlg.showModal();}
 document.getElementById('prev').onclick=function(){show(cur-1)};
 document.getElementById('next').onclick=function(){show(cur+1)};
 document.getElementById('close').onclick=function(){dlg.close()};
 dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
 document.addEventListener('keydown',function(e){if(!dlg.open)return;if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.l)})});
+var l0='es';if(location.hash==='#en')l0='en';else if(location.hash!=='#es'){try{l0=localStorage.getItem('lang')||'es'}catch(e){}}
+setLang(l0);
 var sx=null;dlg.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
 dlg.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));sx=null});
 </script>
